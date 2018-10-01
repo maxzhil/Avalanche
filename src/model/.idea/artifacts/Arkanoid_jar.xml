@@ -1,0 +1,24 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="Arkanoid:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Arkanoid/</output-path>
+    <root id="root">
+      <element id="archive" name="Arkanoid.jar">
+        <element id="directory" name="resources">
+          <element id="file-copy" path="$PROJECT_DIR$/src/resources/settings.properties" />
+          <element id="file-copy" path="$PROJECT_DIR$/src/resources/text.properties" />
+        </element>
+        <element id="directory" name="META-INF">
+          <element id="dir-copy" path="$PROJECT_DIR$/src/META-INF" />
+        </element>
+        <element id="directory" name="ru">
+          <element id="dir-copy" path="$PROJECT_DIR$/out/production/Avanesyan_Arkanoid/ru" />
+        </element>
+      </element>
+      <element id="directory" name="src">
+        <element id="directory" name="resources">
+          <element id="dir-copy" path="$PROJECT_DIR$/src/resources" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
