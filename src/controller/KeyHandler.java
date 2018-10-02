@@ -8,13 +8,13 @@ public class KeyHandler {
 	}
 
 	public void keyPressed(int key) {
-		if (key == 100) {
+		if (key == KeyAdapter.getKeyCode("key.left")) {
 			controller.moveLeft();
 		}
-		if (key == 102) {
-			controller.moveRigth();
+		if (key == KeyAdapter.getKeyCode("key.right")) {
+			controller.moveRight();
 		}
-		if (key == 104) {
+		if (key == KeyAdapter.getKeyCode("key.up")) {
 			controller.jump();
 		}
 		if (key == 101) {

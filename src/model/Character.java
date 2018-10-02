@@ -8,9 +8,6 @@ import model.GameObjectInfo;
 import model.GameObjectListener;
 
 public class Character implements Runnable {
-	private static final int JUMP_SIZE = 200;
-	private static final int MOVE_SIZE = 30;
-	private static final int MOVE_VALUE = 5;
 	private GameField gameField;
 	private Earth earth;
 
@@ -59,11 +56,16 @@ public class Character implements Runnable {
 			earth.changeY(-deviationFromTheMiddle);
 			y = middleGameField;
 		}
+		if (y > middleGameField) {
+			earth.changeY(-deviationFromTheMiddle);
+			y = middleGameField;
+		}
 	}
 
 	private void gravity() {
 		if (earth.getY() + earth.getHeight() > gameField.getHeight()) {
-			earth.changeY(MOVE_VALUE);
+			earth.changeY(Integer.parseInt(Resourcer
+					.getString("character.move.gravity")));
 		} else {
 			if (y + height >= earth.getY()) {
 				earth.setY(y + height);
@@ -73,14 +75,18 @@ public class Character implements Runnable {
 	}
 
 	private void checkBlock() {
-		Rectangle rectangle = getRectangle(this);
+		Rectangle characterRectangle = getRectangle(this);
 		for (Block block : gameField.getBlocks()) {
-			Rectangle rectangle2 = new Rectangle(block.getX(), block.getY(),
-					block.getWidth(), block.getHeight());
-			if (rectangle.intersects(rectangle2)) {
-				if (getY() + getHeight() > block.getY()) {
-					setY(block.getY() - getHeight());
-					canJump = true;
+			Rectangle blockRectangle = new Rectangle(block.getX(),
+					block.getY(), block.getWidth(), block.getHeight());
+			if (characterRectangle.intersects(blockRectangle)) {
+				if (!block.isDrop()) {
+					if (getY() + getHeight() >= block.getY()) {
+						setY(block.getY() - getHeight());
+						canJump = true;
+					}
+				} else {
+					System.out.println("dead");
 				}
 			}
 		}
@@ -88,8 +94,24 @@ public class Character implements Runnable {
 
 	public void jump() {
 		if (canJump) {
-			earth.changeY(-JUMP_SIZE);
+			earth.changeY(-Integer.parseInt(Resourcer
+					.getString("character.jump")));
+			checkBlockForJump();
 			this.canJump = false;
+		}
+	}
+
+	private void checkBlockForJump() {
+		Rectangle characterRectangle = getRectangle(this);
+		for (Block block : gameField.getBlocks()) {
+			Rectangle blockRectangle = new Rectangle(block.getX(),
+					block.getY(), block.getWidth(), block.getHeight());
+			if (characterRectangle.intersects(blockRectangle)) {
+				if (block.getY() + block.getHeight() > getY()) {
+					setY(block.getY() + block.getHeight());
+					canJump = true;
+				}
+			}
 		}
 	}
 
@@ -100,7 +122,7 @@ public class Character implements Runnable {
 	}
 
 	public void moveLeft() {
-		x -= MOVE_SIZE;
+		x -= Integer.parseInt(Resourcer.getString("character.move.toward"));
 		Rectangle rectangle = getRectangle(this);
 		for (Block block : gameField.getBlocks()) {
 			Rectangle rectangle2 = new Rectangle(block.getX(), block.getY(),
@@ -118,8 +140,8 @@ public class Character implements Runnable {
 
 	}
 
-	public void moveRigth() {
-		x += MOVE_SIZE;
+	public void moveRight() {
+		x += Integer.parseInt(Resourcer.getString("character.move.toward"));
 		Rectangle rectangle = getRectangle(this);
 		for (Block block : gameField.getBlocks()) {
 			Rectangle rectangle2 = new Rectangle(block.getX(), block.getY(),

@@ -10,7 +10,7 @@ import model.GameObjectListener;
 public class BlockPanel extends JPanel implements GameObjectListener {
 	public BlockPanel() {
 		super();
-		setBackground(Color.blue);
+		setBackground(Color.BLUE);
 	}
 
 	@Override

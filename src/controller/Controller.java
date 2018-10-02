@@ -14,8 +14,8 @@ public class Controller {
 		model.getGameCharacter().moveLeft();
 	}
 
-	public void moveRigth() {
-		model.getGameCharacter().moveRigth();
+	public void moveRight() {
+		model.getGameCharacter().moveRight();
 	}
 
 	public void jump() {

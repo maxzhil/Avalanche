@@ -33,7 +33,7 @@ public class View extends JFrame implements AddBlockListener {
 		super();
 		this.model = model;
 		this.controller = controller;
-		this.setTitle("01-01-Zhilenko");
+		this.setTitle("01-06-Zhilenko");
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel = new JPanel();
