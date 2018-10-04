@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.listeners.GameObjectListener;
+
 public class Earth implements Runnable {
 	private int x;
 	private int y;

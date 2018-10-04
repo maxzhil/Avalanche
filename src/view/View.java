@@ -16,12 +16,13 @@ import view.panel.EarthPanel;
 import controller.Controller;
 import controller.KeyHandler;
 
-import model.AddBlockListener;
 import model.Block;
 import model.Model;
+import model.listeners.AddBlockListener;
 
 public class View extends JFrame implements AddBlockListener {
 
+	private static final long serialVersionUID = 1L;
 	private Model model;
 	private Controller controller;
 	private JPanel mainPanel;
@@ -60,11 +61,9 @@ public class View extends JFrame implements AddBlockListener {
 
 	@Override
 	public void addBlock(Block block) {
-		BlockPanel blockPanel = new BlockPanel();
+		BlockPanel blockPanel = new BlockPanel(block.getColor());
 		block.addListener(blockPanel);
 		blockPanels.add(blockPanel);
 		mainPanel.add(blockPanel);
-
 	}
-
 }

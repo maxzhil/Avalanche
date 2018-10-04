@@ -6,6 +6,10 @@ public class GameObjectInfo {
 	private int width;
 	private int height;
 
+	public GameObjectInfo() {
+
+	}
+
 	public GameObjectInfo(int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;

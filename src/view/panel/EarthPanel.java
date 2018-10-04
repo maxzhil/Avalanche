@@ -5,7 +5,7 @@ import java.awt.Color;
 import javax.swing.JPanel;
 
 import model.GameObjectInfo;
-import model.GameObjectListener;
+import model.listeners.GameObjectListener;
 
 public class EarthPanel extends JPanel implements GameObjectListener {
 	public EarthPanel() {

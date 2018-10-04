@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.GameField;
 import model.GameObjectInfo;
-import model.GameObjectListener;
+import model.listeners.GameObjectListener;
 
 public class Character implements Runnable {
 	private GameField gameField;
@@ -51,14 +51,10 @@ public class Character implements Runnable {
 
 	private void checkCoordinateY() {
 		int middleGameField = gameField.getHeight() / 2;
-		int deviationFromTheMiddle = middleGameField - y;
-		if (y < middleGameField) {
+		int deviationFromTheMiddle = middleGameField - getY();
+		if (getY() != middleGameField) {
 			earth.changeY(-deviationFromTheMiddle);
-			y = middleGameField;
-		}
-		if (y > middleGameField) {
-			earth.changeY(-deviationFromTheMiddle);
-			y = middleGameField;
+			setY(middleGameField);
 		}
 	}
 
@@ -67,8 +63,8 @@ public class Character implements Runnable {
 			earth.changeY(Integer.parseInt(Resourcer
 					.getString("character.move.gravity")));
 		} else {
-			if (y + height >= earth.getY()) {
-				earth.setY(y + height);
+			if (getY() + getHeight() >= earth.getY()) {
+				earth.setY(getY() + getHeight());
 				canJump = true;
 			}
 		}
@@ -86,7 +82,7 @@ public class Character implements Runnable {
 						canJump = true;
 					}
 				} else {
-					System.out.println("dead");
+					// System.out.println("dead");
 				}
 			}
 		}

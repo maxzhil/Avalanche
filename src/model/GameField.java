@@ -8,7 +8,7 @@ import model.Block;
 public class GameField {
 	private int width;
 	private int height;
-	private List<Block> blocks = new ArrayList<Block>();
+	private volatile List<Block> blocks = new ArrayList<Block>();
 
 	public GameField(int width, int height) {
 		this.width = width;

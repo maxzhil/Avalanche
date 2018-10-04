@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import model.listeners.AddBlockListener;
+
 public class Model extends Thread {
 	private boolean isPlay = true;
 	private Random random = new Random();
@@ -24,7 +26,6 @@ public class Model extends Thread {
 				Integer.parseInt(Resourcer.getString("model.character.width")),
 				Integer.parseInt(Resourcer.getString("model.character.height")),
 				gameField, earth);
-
 	}
 
 	@Override
@@ -33,28 +34,22 @@ public class Model extends Thread {
 		threadEarth.start();
 		Thread thread = new Thread(character);
 		thread.start();
+		while (true) {
+			addBlock();
+			try {
+				sleep(random.nextInt(1500));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void addBlockListener(AddBlockListener addBlockListener) {
 		listeners.add(addBlockListener);
-
 	}
 
-	/*
-	 * public void init() { Block block = new Block(30, 400, BLOCK_WIDTH,
-	 * BLOCK_HEIGHT, gameField, earth); gameField.addBlock(block); Thread thread
-	 * = new Thread(block); thread.start(); threads.add(thread);
-	 * notifyAddBlockListener(block);
-	 * 
-	 * }
-	 */
-
 	public void addBlock() {
-		Block block = new Block(random.nextInt(gameField.getWidth()
-				- Integer.parseInt(Resourcer.getString("model.block.width"))),
-				0, Integer.parseInt(Resourcer.getString("model.block.width")),
-				Integer.parseInt(Resourcer.getString("model.block.height")),
-				gameField, earth);
+		Block block = BlockCreator.createBlock(gameField, earth);
 		gameField.addBlock(block);
 		Thread thread = new Thread(block);
 		thread.start();

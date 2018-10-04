@@ -1,15 +1,21 @@
 package model;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import javax.sql.rowset.Joinable;
+
 import model.GameField;
 import model.GameObjectInfo;
-import model.GameObjectListener;
+import model.listeners.GameObjectListener;
 
 public class Block extends GameObjectInfo implements Runnable {
-	private boolean isDrop = true;
+	private boolean isAlive = true;
+	private Color color;
+	private boolean isDropping = true;
 	private Random random = new Random();
 	private GameField gameField;
 	private Earth earth;
@@ -36,12 +42,12 @@ public class Block extends GameObjectInfo implements Runnable {
 	}
 
 	public void moveY() {
-		if (isDrop) {
+		if (isDropping) {
 			if (getY() + getHeight() < earth.getY()) {
 				changeY(random.nextInt(5));
 			} else {
 				setY(earth.getY() - getHeight());
-				isDrop = false;
+				isDropping = false;
 			}
 		}
 		/*
@@ -57,16 +63,25 @@ public class Block extends GameObjectInfo implements Runnable {
 	}
 
 	private void checkIntersect() {
-		if (this.isDrop) {
+		if (this.isDropping) {
 			Rectangle rectangle = getRectangle(this);
 			for (Block block : gameField.getBlocks()) {
 				if (!block.equals(this)) {
-					if (!block.isDrop) {
+					if (!block.isDropping) {
 						Rectangle rectangle2 = getRectangle(block);
 						if (rectangle.intersects(rectangle2)) {
 							setY(block.getY() - getHeight());
 							this.blocks.add(block);
-							isDrop = false;
+							isDropping = false;
+						}
+					} else {
+						Rectangle rectangle2 = getRectangle(block);
+						if (rectangle.intersects(rectangle2)) {
+							this.isAlive = false;
+							block.isAlive = false;
+							gameField.getBlocks().remove(this);
+							//gameField.getBlocks().remove(block);
+							System.out.println("Столкновение");
 						}
 					}
 				}
@@ -82,7 +97,7 @@ public class Block extends GameObjectInfo implements Runnable {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (isAlive) {
 			moveY();
 			checkIntersect();
 			notifyListeners();
@@ -95,11 +110,20 @@ public class Block extends GameObjectInfo implements Runnable {
 	}
 
 	public boolean isDrop() {
-		return isDrop;
+		return isDropping;
 	}
 
 	public void setDrop(boolean isDrop) {
-		this.isDrop = isDrop;
+		this.isDropping = isDrop;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public Color getColor() {
+
+		return color;
 	}
 
 }
