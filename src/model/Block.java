@@ -5,14 +5,12 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import javax.sql.rowset.Joinable;
-
 import model.GameField;
-import model.GameObjectInfo;
+import model.GameObject;
+import model.listeners.DeleteBlockListener;
 import model.listeners.GameObjectListener;
 
-public class Block extends GameObjectInfo implements Runnable {
+public class Block extends GameObject implements Runnable {
 	private boolean isAlive = true;
 	private Color color;
 	private boolean isDropping = true;
@@ -20,7 +18,7 @@ public class Block extends GameObjectInfo implements Runnable {
 	private GameField gameField;
 	private Earth earth;
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
-	private List<Block> blocks = new ArrayList<Block>();
+	private List<DeleteBlockListener> delListeners = new ArrayList<DeleteBlockListener>();
 
 	public Block(int x, int y, int width, int height, GameField gameField,
 			Earth earth) {
@@ -29,19 +27,23 @@ public class Block extends GameObjectInfo implements Runnable {
 		this.earth = earth;
 	}
 
+	public List<GameObjectListener> geGameObjectListener() {
+		return listeners;
+	}
+
 	public void addListener(GameObjectListener listener) {
 		listeners.add(listener);
 	}
 
 	public void notifyListeners() {
-		GameObjectInfo info = new GameObjectInfo(getX(), getY(), getWidth(),
+		GameObject info = new GameObject(getX(), getY(), getWidth(),
 				getHeight());
 		for (GameObjectListener object : listeners) {
 			object.update(info);
 		}
 	}
 
-	public void moveY() {
+	private void moveY() {
 		if (isDropping) {
 			if (getY() + getHeight() < earth.getY()) {
 				changeY(random.nextInt(5));
@@ -50,63 +52,65 @@ public class Block extends GameObjectInfo implements Runnable {
 				isDropping = false;
 			}
 		}
-		/*
-		 * if (blocks.isEmpty()) { if (getY() + getHeight() <= earth.getY()) {
-		 * changeY(random.nextInt(5));
-		 * 
-		 * } else { setY(earth.getY() - getHeight()); isDrop = false; } } else {
-		 * Rectangle rectangle = getRectangle(this); for (Block block : blocks)
-		 * { Rectangle rectangle2 = getRectangle(block); if
-		 * (!rectangle.intersects(rectangle2)) { isDrop = true; } } }
-		 */
-
 	}
 
 	private void checkIntersect() {
 		if (this.isDropping) {
-			Rectangle rectangle = getRectangle(this);
+			Rectangle rectangleThisBlock = getRectangle(this);
 			for (Block block : gameField.getBlocks()) {
+				Rectangle rectangleBlockFromIterator = getRectangle(block);
 				if (!block.equals(this)) {
 					if (!block.isDropping) {
-						Rectangle rectangle2 = getRectangle(block);
-						if (rectangle.intersects(rectangle2)) {
+						if (rectangleThisBlock
+								.intersects(rectangleBlockFromIterator)) {
 							setY(block.getY() - getHeight());
-							this.blocks.add(block);
 							isDropping = false;
 						}
 					} else {
-						Rectangle rectangle2 = getRectangle(block);
-						if (rectangle.intersects(rectangle2)) {
+						if (rectangleThisBlock
+								.intersects(rectangleBlockFromIterator)) {
 							this.isAlive = false;
 							block.isAlive = false;
-							gameField.getBlocks().remove(this);
-							//gameField.getBlocks().remove(block);
 							System.out.println("Столкновение");
 						}
 					}
 				}
 			}
 		}
+
 	}
 
 	private Rectangle getRectangle(Block block) {
-		Rectangle rectangle = new Rectangle(block.getX(), block.getY(),
-				block.getWidth(), block.getHeight());
-		return rectangle;
+		return new Rectangle(block.getX(), block.getY(), block.getWidth(),
+				block.getHeight());
 	}
 
 	@Override
 	public void run() {
 		while (isAlive) {
-			moveY();
-			checkIntersect();
-			notifyListeners();
+			if (!gameField.isPause()) {
+				moveY();
+				checkIntersect();
+				notifyListeners();
+			}
 			try {
 				Thread.sleep(5);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		notifyListenersDelete();
+	}
+
+	public void addDeleteBlockListener(DeleteBlockListener deleteBlockListener) {
+		delListeners.add(deleteBlockListener);
+	}
+
+	private void notifyListenersDelete() {
+		for (DeleteBlockListener object : delListeners) {
+			object.deleteBlockListener(this);
+		}
+		gameField.deleteBlock(this);
 	}
 
 	public boolean isDrop() {
@@ -122,7 +126,6 @@ public class Block extends GameObjectInfo implements Runnable {
 	}
 
 	public Color getColor() {
-
 		return color;
 	}
 

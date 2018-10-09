@@ -20,7 +20,9 @@ public class KeyHandler {
 		if (key == 101) {
 			controller.addBlock();
 		}
-
+		if (key == KeyAdapter.getKeyCode("key.down")) {
+			controller.pause();
+		}
 	}
 
 }

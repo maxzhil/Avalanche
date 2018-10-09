@@ -5,22 +5,21 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import view.panel.BlockPanel;
 import view.panel.CharacterPanel;
 import view.panel.EarthPanel;
-
 import controller.Controller;
 import controller.KeyHandler;
-
 import model.Block;
 import model.Model;
 import model.listeners.AddBlockListener;
+import model.listeners.DeleteBlockListener;
+import model.listeners.GameObjectListener;
 
-public class View extends JFrame implements AddBlockListener {
+public class View extends JFrame implements AddBlockListener,
+		DeleteBlockListener {
 
 	private static final long serialVersionUID = 1L;
 	private Model model;
@@ -56,6 +55,8 @@ public class View extends JFrame implements AddBlockListener {
 		model.getEarth().addListener(earthPanel);
 		model.getGameCharacter().addListener(characterPanel);
 		model.addBlockListener(this);
+
+		model.addDeleteBlockListener(this);
 		pack();
 	}
 
@@ -65,5 +66,17 @@ public class View extends JFrame implements AddBlockListener {
 		block.addListener(blockPanel);
 		blockPanels.add(blockPanel);
 		mainPanel.add(blockPanel);
+	}
+
+	@Override
+	public void deleteBlockListener(Block block) {
+		BlockPanel blockPanel = null;
+		for (GameObjectListener gameObjectListener : block
+				.geGameObjectListener()) {
+			blockPanel = (BlockPanel) gameObjectListener;
+		}
+		mainPanel.remove(blockPanel);
+		blockPanels.remove(blockPanel);
+		System.out.println("Удаление блока");
 	}
 }

@@ -1,7 +1,7 @@
 package model.listeners;
 
-import model.GameObjectInfo;
+import model.GameObject;
 
 public interface GameObjectListener {
-	public void update(GameObjectInfo info);
+	void update(GameObject info);
 }

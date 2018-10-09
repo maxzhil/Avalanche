@@ -25,5 +25,8 @@ public class Controller {
 	public void addBlock() {
 		model.addBlock();
 	}
+	public void pause() {
+		model.pause();
+	}
 
 }

@@ -5,15 +5,18 @@ import java.util.List;
 import java.util.Random;
 
 import model.listeners.AddBlockListener;
+import model.listeners.DeleteBlockListener;
 
 public class Model extends Thread {
-	private boolean isPlay = true;
+	private boolean isPause = false;
 	private Random random = new Random();
 	private Character character;
 	private GameField gameField;
 	private Earth earth;
 	private List<Thread> threads = new ArrayList<Thread>();
 	private List<AddBlockListener> listeners = new ArrayList<AddBlockListener>();
+	private List<DeleteBlockListener> deleteBlockListeners = new ArrayList<DeleteBlockListener>();
+
 
 	public Model() {
 		gameField = new GameField(Integer.parseInt(Resourcer
@@ -30,27 +33,33 @@ public class Model extends Thread {
 
 	@Override
 	public void run() {
-		Thread threadEarth = new Thread(earth);
-		threadEarth.start();
-		Thread thread = new Thread(character);
-		thread.start();
-		while (true) {
-			addBlock();
+		createEarthThread();
+		createCharacterThread();
+		while (character.isAlive()) {
+			if (!isPause) {
+				addBlock();
+			}
 			try {
 				sleep(random.nextInt(1500));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Game Over");
 	}
 
 	public void addBlockListener(AddBlockListener addBlockListener) {
 		listeners.add(addBlockListener);
 	}
 
+	public void addDeleteBlockListener(DeleteBlockListener addBlockListener) {
+		deleteBlockListeners.add(addBlockListener);
+	}
+
 	public void addBlock() {
 		Block block = BlockCreator.createBlock(gameField, earth);
 		gameField.addBlock(block);
+		block.addDeleteBlockListener(deleteBlockListeners.get(0));
 		Thread thread = new Thread(block);
 		thread.start();
 		threads.add(thread);
@@ -67,13 +76,26 @@ public class Model extends Thread {
 		return character;
 	}
 
+	private void createEarthThread() {
+		Thread threadEarth = new Thread(earth);
+		threadEarth.start();
+	}
+
+	private void createCharacterThread() {
+		Thread threadCharacter = new Thread(character);
+		threadCharacter.start();
+	}
+
 	public Earth getEarth() {
 		return this.earth;
-
 	}
 
 	public GameField getGameField() {
 		return gameField;
 	}
 
+	public void pause() {
+		this.isPause = !isPause;
+		gameField.setPause(isPause);
+	}
 }

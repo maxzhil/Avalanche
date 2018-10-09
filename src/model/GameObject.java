@@ -1,16 +1,15 @@
 package model;
 
-public class GameObjectInfo {
+public class GameObject {
 	private int x;
 	private int y;
 	private int width;
 	private int height;
 
-	public GameObjectInfo() {
-
+	public GameObject() {
 	}
 
-	public GameObjectInfo(int x, int y, int width, int height) {
+	public GameObject(int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.height = height;
@@ -19,6 +18,10 @@ public class GameObjectInfo {
 
 	public int getX() {
 		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
 	}
 
 	public int getY() {

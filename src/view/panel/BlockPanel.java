@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
-import model.GameObjectInfo;
+import model.GameObject;
 import model.listeners.GameObjectListener;
 
 public class BlockPanel extends JPanel implements GameObjectListener {
@@ -17,7 +17,7 @@ public class BlockPanel extends JPanel implements GameObjectListener {
 	}
 
 	@Override
-	public void update(GameObjectInfo info) {
+	public void update(GameObject info) {
 		setLocation(info.getX(), info.getY());
 		setSize(info.getWidth(), info.getHeight());
 

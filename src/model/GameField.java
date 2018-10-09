@@ -6,21 +6,26 @@ import java.util.List;
 import model.Block;
 
 public class GameField {
-	private int width;
 	private int height;
-	private volatile List<Block> blocks = new ArrayList<Block>();
+	private int width;
+	private boolean isPause = false;
+	private List<Block> blocks = new ArrayList<Block>();
 
 	public GameField(int width, int height) {
 		this.width = width;
 		this.height = height;
 	}
 
-	public List<Block> getBlocks() {
+	public synchronized List<Block> getBlocks() {
 		return blocks;
 	}
 
 	public void addBlock(Block block) {
 		blocks.add(block);
+	}
+
+	public synchronized void deleteBlock(Block block) {
+		blocks.remove(block);
 	}
 
 	public void setBlocks(List<Block> blocks) {
@@ -33,6 +38,14 @@ public class GameField {
 
 	public int getHeight() {
 		return height;
+	}
+
+	public boolean isPause() {
+		return isPause;
+	}
+
+	public void setPause(boolean isPause) {
+		this.isPause = isPause;
 	}
 
 }

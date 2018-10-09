@@ -40,7 +40,10 @@ public class Earth implements Runnable {
 	public void changeY(int value) {
 		this.y -= value;
 		for (Block block : gameField.getBlocks()) {
-			block.setY(block.getY() - value);
+			if (!block.isDrop()) {
+				block.setY(block.getY() - value);
+			}
+
 		}
 	}
 
@@ -77,7 +80,7 @@ public class Earth implements Runnable {
 	}
 
 	private void notifyListeners() {
-		GameObjectInfo info = new GameObjectInfo(x, y, width, height);
+		GameObject info = new GameObject(x, y, width, height);
 		for (GameObjectListener object : listeners) {
 			object.update(info);
 		}
