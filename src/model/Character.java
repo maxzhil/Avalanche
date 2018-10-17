@@ -11,6 +11,7 @@ import model.listeners.GameObjectListener;
 public class Character extends GameObject implements Runnable {
 	private GameField gameField;
 	private Earth earth;
+	private Avalanche avalanche;
 	private boolean canJump = true;
 	private boolean isAlive = true;
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
@@ -20,6 +21,7 @@ public class Character extends GameObject implements Runnable {
 		super(x, y, width, height);
 		this.gameField = gameField;
 		this.earth = earth;
+
 	}
 
 	public void addListener(GameObjectListener listener) {
@@ -31,9 +33,11 @@ public class Character extends GameObject implements Runnable {
 		while (isAlive) {
 			if (!gameField.isPause()) {
 				checkCoordinateY();
+				checkAvalanche();
 				gravity();
 				checkBlock();
 				notifyListeners();
+
 			}
 			try {
 				Thread.sleep(5);
@@ -41,6 +45,15 @@ public class Character extends GameObject implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private void checkAvalanche() {
+		if (avalanche != null) {
+			if (getY() + getHeight() >= avalanche.getY()) {
+				isAlive = false;
+			}
+		}
+
 	}
 
 	private void checkCoordinateY() {
@@ -70,7 +83,7 @@ public class Character extends GameObject implements Runnable {
 			Rectangle blockRectangle = new Rectangle(block.getX(),
 					block.getY(), block.getWidth(), block.getHeight());
 			if (characterRectangle.intersects(blockRectangle)) {
-				if (!block.isDrop()) {
+				if (!block.isDropping()) {
 					if (getY() + getHeight() >= block.getY()) {
 						setY(block.getY() - getHeight());
 						canJump = true;
@@ -86,6 +99,10 @@ public class Character extends GameObject implements Runnable {
 		if (canJump) {
 			earth.changeY(-Integer.parseInt(Resourcer
 					.getString("character.jump")));
+			if (avalanche != null) {
+				avalanche.changeY(-Integer.parseInt(Resourcer
+						.getString("character.jump")));
+			}
 			checkBlockForJump();
 			this.canJump = false;
 		}
@@ -112,14 +129,16 @@ public class Character extends GameObject implements Runnable {
 	}
 
 	public void moveLeft() {
-		setX(getX()- Integer.parseInt(Resourcer.getString("character.move.toward")));
+		setX(getX()
+				- Integer
+						.parseInt(Resourcer.getString("character.move.toward")));
 		Rectangle rectangle = getRectangle(this);
 		for (Block block : gameField.getBlocks()) {
 			Rectangle rectangle2 = new Rectangle(block.getX(), block.getY(),
 					block.getWidth(), block.getHeight());
 			if (rectangle.intersects(rectangle2)) {
 				if (getX() <= block.getX() + block.getWidth()) {
-					setX(block.getX() + block.getWidth() + 1);
+					setX(block.getX() + block.getWidth());
 					return;
 				}
 			}
@@ -130,12 +149,14 @@ public class Character extends GameObject implements Runnable {
 	}
 
 	public void moveRight() {
-		setX(getX()+ Integer.parseInt(Resourcer.getString("character.move.toward")));
-		Rectangle rectangle = getRectangle(this);
+		setX(getX()
+				+ Integer
+						.parseInt(Resourcer.getString("character.move.toward")));
+		Rectangle rectangleCharacter = getRectangle(this);
 		for (Block block : gameField.getBlocks()) {
-			Rectangle rectangle2 = new Rectangle(block.getX(), block.getY(),
-					block.getWidth(), block.getHeight());
-			if (rectangle.intersects(rectangle2)) {
+			Rectangle rectangleBlock = new Rectangle(block.getX(),
+					block.getY(), block.getWidth(), block.getHeight());
+			if (rectangleCharacter.intersects(rectangleBlock)) {
 				if (getX() + getWidth() >= block.getX()) {
 					setX(block.getX() - getWidth());
 				}
@@ -147,13 +168,18 @@ public class Character extends GameObject implements Runnable {
 	}
 
 	public void notifyListeners() {
-		GameObject info = new GameObject(getX(), getY(), getWidth(), getHeight());
+		GameObject info = new GameObject(getX(), getY(), getWidth(),
+				getHeight());
 		for (GameObjectListener object : listeners) {
 			object.update(info);
 		}
 	}
+
 	public boolean isAlive() {
 		return isAlive;
 	}
 
+	public void addAvalanche(Avalanche avalanche) {
+		this.avalanche = avalanche;
+	}
 }

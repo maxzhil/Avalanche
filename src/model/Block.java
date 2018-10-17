@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import model.GameField;
 import model.GameObject;
 import model.listeners.DeleteBlockListener;
@@ -14,17 +13,18 @@ public class Block extends GameObject implements Runnable {
 	private boolean isAlive = true;
 	private Color color;
 	private boolean isDropping = true;
-	private Random random = new Random();
+	private int fallingSpeed;
 	private GameField gameField;
 	private Earth earth;
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
 	private List<DeleteBlockListener> delListeners = new ArrayList<DeleteBlockListener>();
 
 	public Block(int x, int y, int width, int height, GameField gameField,
-			Earth earth) {
+			Earth earth, int fallingSpeed) {
 		super(x, y, width, height);
 		this.gameField = gameField;
 		this.earth = earth;
+		this.fallingSpeed = fallingSpeed;
 	}
 
 	public List<GameObjectListener> geGameObjectListener() {
@@ -46,7 +46,7 @@ public class Block extends GameObject implements Runnable {
 	private void moveY() {
 		if (isDropping) {
 			if (getY() + getHeight() < earth.getY()) {
-				changeY(random.nextInt(5));
+				changeY(fallingSpeed);
 			} else {
 				setY(earth.getY() - getHeight());
 				isDropping = false;
@@ -71,7 +71,8 @@ public class Block extends GameObject implements Runnable {
 								.intersects(rectangleBlockFromIterator)) {
 							this.isAlive = false;
 							block.isAlive = false;
-							System.out.println("Столкновение");
+							//удалять блоки тут?
+							System.out.println("Collision");
 						}
 					}
 				}
@@ -94,7 +95,7 @@ public class Block extends GameObject implements Runnable {
 				notifyListeners();
 			}
 			try {
-				Thread.sleep(5);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -113,11 +114,11 @@ public class Block extends GameObject implements Runnable {
 		gameField.deleteBlock(this);
 	}
 
-	public boolean isDrop() {
+	public boolean isDropping() {
 		return isDropping;
 	}
 
-	public void setDrop(boolean isDrop) {
+	public void setDropping(boolean isDrop) {
 		this.isDropping = isDrop;
 	}
 

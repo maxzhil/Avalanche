@@ -18,7 +18,8 @@ public class KeyHandler {
 			controller.jump();
 		}
 		if (key == 101) {
-			controller.addBlock();
+			//controller.addBlock();
+			controller.addAvalanche();
 		}
 		if (key == KeyAdapter.getKeyCode("key.down")) {
 			controller.pause();

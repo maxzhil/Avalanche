@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -7,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import view.panel.AvalanchePanel;
 import view.panel.BlockPanel;
 import view.panel.CharacterPanel;
 import view.panel.EarthPanel;
@@ -24,9 +27,10 @@ public class View extends JFrame implements AddBlockListener,
 	private static final long serialVersionUID = 1L;
 	private Model model;
 	private Controller controller;
-	private JPanel mainPanel;
+	private JPanel gameFieldPanel;
 	private CharacterPanel characterPanel;
 	private EarthPanel earthPanel;
+	private AvalanchePanel avalanchePanel;
 	private List<BlockPanel> blockPanels = new ArrayList<BlockPanel>();
 
 	public View(Model model, final Controller controller) {
@@ -36,16 +40,18 @@ public class View extends JFrame implements AddBlockListener,
 		this.setTitle("01-06-Zhilenko");
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainPanel = new JPanel();
-		mainPanel.setPreferredSize(new Dimension(model.getGameField()
+		gameFieldPanel = new JPanel();
+		gameFieldPanel.setPreferredSize(new Dimension(model.getGameField()
 				.getWidth(), model.getGameField().getHeight()));
-		add(mainPanel);
+		this.setLayout(new BorderLayout());
+		this.getContentPane().add(gameFieldPanel, BorderLayout.CENTER);
 
 		characterPanel = new CharacterPanel();
 		earthPanel = new EarthPanel();
-		mainPanel.add(characterPanel);
-		mainPanel.add(earthPanel);
-
+		avalanchePanel = new AvalanchePanel();
+		gameFieldPanel.add(characterPanel);
+		gameFieldPanel.add(earthPanel);
+		gameFieldPanel.add(avalanchePanel);
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -54,6 +60,7 @@ public class View extends JFrame implements AddBlockListener,
 		});
 		model.getEarth().addListener(earthPanel);
 		model.getGameCharacter().addListener(characterPanel);
+		model.getAvalanche().addListener(avalanchePanel);
 		model.addBlockListener(this);
 
 		model.addDeleteBlockListener(this);
@@ -65,18 +72,21 @@ public class View extends JFrame implements AddBlockListener,
 		BlockPanel blockPanel = new BlockPanel(block.getColor());
 		block.addListener(blockPanel);
 		blockPanels.add(blockPanel);
-		mainPanel.add(blockPanel);
+		gameFieldPanel.add(blockPanel);
+		gameFieldPanel.repaint();
 	}
 
 	@Override
 	public void deleteBlockListener(Block block) {
 		BlockPanel blockPanel = null;
+
 		for (GameObjectListener gameObjectListener : block
 				.geGameObjectListener()) {
 			blockPanel = (BlockPanel) gameObjectListener;
 		}
-		mainPanel.remove(blockPanel);
+		gameFieldPanel.remove(blockPanel);
+		gameFieldPanel.repaint();
 		blockPanels.remove(blockPanel);
-		System.out.println("Удаление блока");
+		System.out.println("delete Block");
 	}
 }

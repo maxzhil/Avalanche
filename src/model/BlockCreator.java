@@ -15,32 +15,32 @@ public class BlockCreator {
 		switch (blockTypes[random.nextInt(3)]) {
 		case SMALL:
 			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.small.width"))), 0,
+					.getString("model.block.small.width"))), -150,
 					Integer.parseInt(Resourcer
 							.getString("model.block.small.width")),
 					Integer.parseInt(Resourcer
 							.getString("model.block.small.height")), gameField,
-					earth);
+					earth, random.nextInt(3));
 			block.setColor(Color.BLUE);
 			break;
 		case MIDDLE:
 			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.middle.width"))), 0,
+					.getString("model.block.middle.width"))), -150,
 					Integer.parseInt(Resourcer
 							.getString("model.block.middle.width")),
 					Integer.parseInt(Resourcer
 							.getString("model.block.middle.height")),
-					gameField, earth);
+					gameField, earth, random.nextInt(3));
 			block.setColor(Color.ORANGE);
 			break;
 		case LARGE:
 			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.large.width"))), 0,
+					.getString("model.block.large.width"))),-150,
 					Integer.parseInt(Resourcer
 							.getString("model.block.large.width")),
 					Integer.parseInt(Resourcer
 							.getString("model.block.large.height")), gameField,
-					earth);
+					earth, random.nextInt(3));
 			block.setColor(Color.DARK_GRAY);
 			break;
 		}

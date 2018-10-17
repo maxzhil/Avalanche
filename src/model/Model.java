@@ -13,22 +13,24 @@ public class Model extends Thread {
 	private Character character;
 	private GameField gameField;
 	private Earth earth;
+	private Avalanche avalanche;
 	private List<Thread> threads = new ArrayList<Thread>();
 	private List<AddBlockListener> listeners = new ArrayList<AddBlockListener>();
 	private List<DeleteBlockListener> deleteBlockListeners = new ArrayList<DeleteBlockListener>();
-
 
 	public Model() {
 		gameField = new GameField(Integer.parseInt(Resourcer
 				.getString("model.gamefield.width")),
 				Integer.parseInt(Resourcer.getString("model.gamefield.height")));
 		earth = new Earth(gameField);
+		avalanche = new Avalanche(earth);
 		character = new Character(
 				Integer.parseInt(Resourcer.getString("model.character.x")),
 				Integer.parseInt(Resourcer.getString("model.character.y")),
 				Integer.parseInt(Resourcer.getString("model.character.width")),
 				Integer.parseInt(Resourcer.getString("model.character.height")),
 				gameField, earth);
+
 	}
 
 	@Override
@@ -46,6 +48,7 @@ public class Model extends Thread {
 			}
 		}
 		System.out.println("Game Over");
+
 	}
 
 	public void addBlockListener(AddBlockListener addBlockListener) {
@@ -90,6 +93,10 @@ public class Model extends Thread {
 		return this.earth;
 	}
 
+	public Avalanche getAvalanche() {
+		return avalanche;
+	}
+
 	public GameField getGameField() {
 		return gameField;
 	}
@@ -97,5 +104,13 @@ public class Model extends Thread {
 	public void pause() {
 		this.isPause = !isPause;
 		gameField.setPause(isPause);
+	}
+
+	public void addAvalanche() {
+		Thread thread = new Thread(avalanche);
+		thread.start();
+
+		character.addAvalanche(avalanche);
+		threads.add(thread);
 	}
 }

@@ -11,13 +11,13 @@ public class Earth implements Runnable {
 	private int width;
 	private int height;
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
-	GameField gameField;
+	private GameField gameField;
 
 	public Earth(GameField gameField) {
 		this.gameField = gameField;
-		this.x = 0;
-		this.y = 360;
-		this.height = 240;
+		this.x = Integer.parseInt(Resourcer.getString("earth.x"));
+		this.y = Integer.parseInt(Resourcer.getString("earth.y"));
+		this.height = Integer.parseInt(Resourcer.getString("earth.height"));
 		this.width = gameField.getWidth();
 	}
 
@@ -40,10 +40,9 @@ public class Earth implements Runnable {
 	public void changeY(int value) {
 		this.y -= value;
 		for (Block block : gameField.getBlocks()) {
-			if (!block.isDrop()) {
+			if (!block.isDropping()) {
 				block.setY(block.getY() - value);
 			}
-
 		}
 	}
 
@@ -85,5 +84,4 @@ public class Earth implements Runnable {
 			object.update(info);
 		}
 	}
-
 }

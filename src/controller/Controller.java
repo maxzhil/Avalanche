@@ -29,4 +29,9 @@ public class Controller {
 		model.pause();
 	}
 
+	public void addAvalanche() {
+		model.addAvalanche();
+		
+	}
+
 }
