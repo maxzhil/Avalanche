@@ -17,7 +17,7 @@ public class Avalanche implements Runnable {
 	public Avalanche(Earth earth) {
 		this.earth = earth;
 		this.x = Integer.parseInt(Resourcer.getString("avalanche.x"));
-		this.y = earth.getY();
+		this.y = earth.getY() + earth.getHeight();
 		this.height = Integer.parseInt(Resourcer.getString("avalanche.height"));
 		this.width = earth.getWidth();
 	}
@@ -28,21 +28,18 @@ public class Avalanche implements Runnable {
 			notifyListeners();
 			moveY();
 			try {
-				Thread.sleep(10);
+				Thread.sleep(300);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+
 		}
 	}
 
 	private void moveY() {
 		value++;
-		this.y = earth.getY() - value;
-		try {
-			Thread.sleep(300);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		this.y = earth.getY() + earth.getHeight() - value;
+	
 		this.height++;
 
 	}

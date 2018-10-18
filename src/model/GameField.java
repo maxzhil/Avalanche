@@ -9,7 +9,7 @@ public class GameField {
 	private int height;
 	private int width;
 	private boolean isPause = false;
-	private List<Block> blocks = new ArrayList<Block>();
+	private volatile List<Block> blocks = new ArrayList<Block>();
 
 	public GameField(int width, int height) {
 		this.width = width;

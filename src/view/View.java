@@ -7,8 +7,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import view.panel.AvalanchePanel;
 import view.panel.BlockPanel;
 import view.panel.CharacterPanel;
@@ -20,9 +20,10 @@ import model.Model;
 import model.listeners.AddBlockListener;
 import model.listeners.DeleteBlockListener;
 import model.listeners.GameObjectListener;
+import model.listeners.GameOverListener;
 
 public class View extends JFrame implements AddBlockListener,
-		DeleteBlockListener {
+		DeleteBlockListener, GameOverListener {
 
 	private static final long serialVersionUID = 1L;
 	private Model model;
@@ -58,12 +59,12 @@ public class View extends JFrame implements AddBlockListener,
 				new KeyHandler(controller).keyPressed(e.getKeyCode());
 			}
 		});
-		model.getEarth().addListener(earthPanel);
-		model.getGameCharacter().addListener(characterPanel);
-		model.getAvalanche().addListener(avalanchePanel);
-		model.addBlockListener(this);
-
-		model.addDeleteBlockListener(this);
+		controller.addListenerEarth(earthPanel);
+		controller.addListenerCharacter(characterPanel);
+		controller.addListenerAvalanche(avalanchePanel);
+		controller.addBlockListener(this);
+		controller.addGameOverListener(this);
+		controller.addDeleteBlockListener(this);
 		pack();
 	}
 
@@ -79,7 +80,6 @@ public class View extends JFrame implements AddBlockListener,
 	@Override
 	public void deleteBlockListener(Block block) {
 		BlockPanel blockPanel = null;
-
 		for (GameObjectListener gameObjectListener : block
 				.geGameObjectListener()) {
 			blockPanel = (BlockPanel) gameObjectListener;
@@ -88,5 +88,11 @@ public class View extends JFrame implements AddBlockListener,
 		gameFieldPanel.repaint();
 		blockPanels.remove(blockPanel);
 		System.out.println("delete Block");
+	}
+
+	@Override
+	public void gameOver() {
+		JOptionPane.showMessageDialog(null, "Game over");
+		System.exit(0);
 	}
 }

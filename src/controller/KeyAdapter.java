@@ -8,11 +8,11 @@ public class KeyAdapter {
 
 	public static int getKeyCode(String resourceName) {
 		String keyName = Resourcer.getString(resourceName);
-		try {
+		/*try {
 			return Integer.parseInt(keyName);
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {*/
 			return getKeyCodeFromKeyEvent(keyName);
-		}
+		//}
 	}
 
 	private static int getKeyCodeFromKeyEvent(String keyName) {

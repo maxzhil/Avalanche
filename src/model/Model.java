@@ -6,6 +6,7 @@ import java.util.Random;
 
 import model.listeners.AddBlockListener;
 import model.listeners.DeleteBlockListener;
+import model.listeners.GameOverListener;
 
 public class Model extends Thread {
 	private boolean isPause = false;
@@ -17,6 +18,7 @@ public class Model extends Thread {
 	private List<Thread> threads = new ArrayList<Thread>();
 	private List<AddBlockListener> listeners = new ArrayList<AddBlockListener>();
 	private List<DeleteBlockListener> deleteBlockListeners = new ArrayList<DeleteBlockListener>();
+	private GameOverListener gameOverListener;
 
 	public Model() {
 		gameField = new GameField(Integer.parseInt(Resourcer
@@ -47,8 +49,11 @@ public class Model extends Thread {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Game Over");
+		notifyGameOverListener();
+	}
 
+	private void notifyGameOverListener() {
+		gameOverListener.gameOver();
 	}
 
 	public void addBlockListener(AddBlockListener addBlockListener) {
@@ -57,6 +62,10 @@ public class Model extends Thread {
 
 	public void addDeleteBlockListener(DeleteBlockListener addBlockListener) {
 		deleteBlockListeners.add(addBlockListener);
+	}
+
+	public void addGameOverListener(GameOverListener gameOverListener) {
+		this.gameOverListener = gameOverListener;
 	}
 
 	public void addBlock() {
