@@ -1,5 +1,7 @@
 package controller;
 
+import model.Resourcer;
+
 public class KeyHandler {
 	private Controller controller;
 
@@ -8,20 +10,20 @@ public class KeyHandler {
 	}
 
 	public void keyPressed(int key) {
-		if (key == KeyAdapter.getKeyCode("key.left")) {
+		if (key == KeyAdapter.getKeyCode(Resourcer.getString("key.left"))) {
 			controller.moveLeft();
 		}
-		if (key == KeyAdapter.getKeyCode("key.right")) {
+		if (key == KeyAdapter.getKeyCode(Resourcer.getString("key.right"))) {
 			controller.moveRight();
 		}
-		if (key == KeyAdapter.getKeyCode("key.up")) {
+		if (key == KeyAdapter.getKeyCode(Resourcer.getString("key.up"))) {
 			controller.jump();
 		}
 		if (key == 101) {
-			//controller.addBlock();
+			//TODO add avalanche not pressing key
 			controller.addAvalanche();
 		}
-		if (key == KeyAdapter.getKeyCode("key.down")) {
+		if (key == KeyAdapter.getKeyCode(Resourcer.getString("key.down"))) {
 			controller.pause();
 		}
 	}

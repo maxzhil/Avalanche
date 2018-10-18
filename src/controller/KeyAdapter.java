@@ -6,16 +6,11 @@ import model.Resourcer;
 
 public class KeyAdapter {
 
-	public static int getKeyCode(String resourceName) {
-		String keyName = Resourcer.getString(resourceName);
-		/*try {
-			return Integer.parseInt(keyName);
-		} catch (NumberFormatException e) {*/
-			return getKeyCodeFromKeyEvent(keyName);
-		//}
+	private KeyAdapter() {
+
 	}
 
-	private static int getKeyCodeFromKeyEvent(String keyName) {
+	public static int getKeyCode(String keyName) {
 		int result = -1;
 		try {
 			Field field = KeyEvent.class.getDeclaredField(Resourcer
