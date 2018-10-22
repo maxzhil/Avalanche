@@ -33,7 +33,7 @@ public class GameObject {
 	}
 
 	public void changeY(int value) {
-		this.y += value;
+		this.y -= value;
 	}
 
 	public int getWidth() {

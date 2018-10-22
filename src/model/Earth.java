@@ -5,61 +5,28 @@ import java.util.List;
 
 import model.listeners.GameObjectListener;
 
-public class Earth implements Runnable {
-	private int x;
-	private int y;
-	private int width;
-	private int height;
+public class Earth extends GameObject implements Runnable {
+
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
 	private GameField gameField;
 
 	public Earth(GameField gameField) {
+		super(Integer.parseInt(Resourcer.getString("earth.x")), Integer
+				.parseInt(Resourcer.getString("earth.y")), gameField.getWidth()
+				- Integer.parseInt(Resourcer.getString("earth.value.indent")),
+				Integer.parseInt(Resourcer.getString("earth.height")));
 		this.gameField = gameField;
-		this.x = Integer.parseInt(Resourcer.getString("earth.x"));
-		this.y = Integer.parseInt(Resourcer.getString("earth.y"));
-		this.height = Integer.parseInt(Resourcer.getString("earth.height"));
-		this.width = gameField.getWidth();
 	}
 
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public void changeY(int value) {
-		this.y -= value;
+	public void moveY(int value) {
+		changeY(value);
 		for (Block block : gameField.getBlocks()) {
 			if (!block.isDropping()) {
 				block.setY(block.getY() - value);
+			} else {
+				block.changeY(value);
 			}
 		}
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
 	}
 
 	@Override
@@ -79,9 +46,12 @@ public class Earth implements Runnable {
 	}
 
 	private void notifyListeners() {
-		GameObject info = new GameObject(x, y, width, height);
 		for (GameObjectListener object : listeners) {
-			object.update(info);
+			object.update(this);
 		}
+	}
+
+	public GameField getGameField() {
+		return gameField;
 	}
 }

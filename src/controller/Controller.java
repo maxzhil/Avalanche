@@ -15,15 +15,15 @@ public class Controller {
 	}
 
 	public void moveLeft() {
-		model.getGameCharacter().moveLeft();
+		model.moveLeft();
 	}
 
 	public void moveRight() {
-		model.getGameCharacter().moveRight();
+		model.moveRight();
 	}
 
 	public void jump() {
-		model.getGameCharacter().jump();
+		model.jump();
 	}
 
 	public void addBlock() {

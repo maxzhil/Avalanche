@@ -81,7 +81,7 @@ public class View extends JFrame implements AddBlockListener,
 	public void deleteBlockListener(Block block) {
 		BlockPanel blockPanel = null;
 		for (GameObjectListener gameObjectListener : block
-				.geGameObjectListener()) {
+				.getGameObjectListeners()) {
 			blockPanel = (BlockPanel) gameObjectListener;
 		}
 		gameFieldPanel.remove(blockPanel);

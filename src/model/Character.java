@@ -60,14 +60,14 @@ public class Character extends GameObject implements Runnable {
 		int middleGameField = gameField.getHeight() / 2;
 		int deviationFromTheMiddle = middleGameField - getY();
 		if (getY() != middleGameField) {
-			earth.changeY(-deviationFromTheMiddle);
+			earth.moveY(-deviationFromTheMiddle);
 			setY(middleGameField);
 		}
 	}
 
 	private void gravity() {
 		if (earth.getY() + earth.getHeight() > gameField.getHeight()) {
-			earth.changeY(Integer.parseInt(Resourcer
+			earth.moveY(Integer.parseInt(Resourcer
 					.getString("character.move.gravity")));
 		} else {
 			if (getY() + getHeight() >= earth.getY()) {
@@ -97,7 +97,7 @@ public class Character extends GameObject implements Runnable {
 
 	public void jump() {
 		if (canJump) {
-			earth.changeY(-Integer.parseInt(Resourcer
+			earth.moveY(-Integer.parseInt(Resourcer
 					.getString("character.jump")));
 			if (avalanche != null) {
 				avalanche.changeY(-Integer.parseInt(Resourcer
@@ -168,10 +168,8 @@ public class Character extends GameObject implements Runnable {
 	}
 
 	public void notifyListeners() {
-		GameObject info = new GameObject(getX(), getY(), getWidth(),
-				getHeight());
 		for (GameObjectListener object : listeners) {
-			object.update(info);
+			object.update(this);
 		}
 	}
 

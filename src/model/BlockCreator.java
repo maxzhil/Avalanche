@@ -6,6 +6,7 @@ import java.util.Random;
 public class BlockCreator {
 	private static Random random = new Random();
 	private static BlockType[] blockTypes = BlockType.values();
+	private static final int VALUE_START_BLOCK = -150;
 
 	private BlockCreator() {
 	}
@@ -15,7 +16,7 @@ public class BlockCreator {
 		switch (blockTypes[random.nextInt(3)]) {
 		case SMALL:
 			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.small.width"))), -150,
+					.getString("model.block.small.width"))), VALUE_START_BLOCK,
 					Integer.parseInt(Resourcer
 							.getString("model.block.small.width")),
 					Integer.parseInt(Resourcer
@@ -25,8 +26,8 @@ public class BlockCreator {
 			break;
 		case MIDDLE:
 			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.middle.width"))), -150,
-					Integer.parseInt(Resourcer
+					.getString("model.block.middle.width"))),
+					VALUE_START_BLOCK, Integer.parseInt(Resourcer
 							.getString("model.block.middle.width")),
 					Integer.parseInt(Resourcer
 							.getString("model.block.middle.height")),
@@ -35,7 +36,7 @@ public class BlockCreator {
 			break;
 		case LARGE:
 			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.large.width"))),-150,
+					.getString("model.block.large.width"))), VALUE_START_BLOCK,
 					Integer.parseInt(Resourcer
 							.getString("model.block.large.width")),
 					Integer.parseInt(Resourcer

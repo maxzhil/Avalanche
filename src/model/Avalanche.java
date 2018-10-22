@@ -5,21 +5,17 @@ import java.util.List;
 
 import model.listeners.GameObjectListener;
 
-public class Avalanche implements Runnable {
-	private int x;
-	private int y;
-	private int width;
-	private int height;
+public class Avalanche extends GameObject implements Runnable {
+
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
 	private Earth earth;
 	private int value = 1;
 
 	public Avalanche(Earth earth) {
+		super(Integer.parseInt(Resourcer.getString("avalanche.x")), earth
+				.getY() + earth.getHeight(), earth.getGameField().getWidth(),
+				Integer.parseInt(Resourcer.getString("avalanche.height")));
 		this.earth = earth;
-		this.x = Integer.parseInt(Resourcer.getString("avalanche.x"));
-		this.y = earth.getY() + earth.getHeight();
-		this.height = Integer.parseInt(Resourcer.getString("avalanche.height"));
-		this.width = earth.getWidth();
 	}
 
 	@Override
@@ -28,7 +24,7 @@ public class Avalanche implements Runnable {
 			notifyListeners();
 			moveY();
 			try {
-				Thread.sleep(300);
+				Thread.sleep(150);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -38,9 +34,8 @@ public class Avalanche implements Runnable {
 
 	private void moveY() {
 		value++;
-		this.y = earth.getY() + earth.getHeight() - value;
-	
-		this.height++;
+		setY(earth.getY() + earth.getHeight() - value);
+		setHeight(getHeight() + 1);
 
 	}
 
@@ -49,18 +44,9 @@ public class Avalanche implements Runnable {
 	}
 
 	public void notifyListeners() {
-		GameObject info = new GameObject(x, y, width, height);
 		for (GameObjectListener object : listeners) {
-			object.update(info);
+			object.update(this);
 		}
-	}
-
-	public void changeY(int value) {
-		this.y -= value;
-	}
-
-	public int getY() {
-		return y;
 	}
 
 }

@@ -27,7 +27,7 @@ public class Block extends GameObject implements Runnable {
 		this.fallingSpeed = fallingSpeed;
 	}
 
-	public List<GameObjectListener> geGameObjectListener() {
+	public List<GameObjectListener> getGameObjectListeners() {
 		return listeners;
 	}
 
@@ -36,17 +36,15 @@ public class Block extends GameObject implements Runnable {
 	}
 
 	public void notifyListeners() {
-		GameObject info = new GameObject(getX(), getY(), getWidth(),
-				getHeight());
 		for (GameObjectListener object : listeners) {
-			object.update(info);
+			object.update(this);
 		}
 	}
 
 	private void moveY() {
 		if (isDropping) {
 			if (getY() + getHeight() < earth.getY()) {
-				changeY(fallingSpeed);
+				changeY(-fallingSpeed);
 			} else {
 				setY(earth.getY() - getHeight());
 				isDropping = false;
@@ -71,7 +69,6 @@ public class Block extends GameObject implements Runnable {
 								.intersects(rectangleBlockFromIterator)) {
 							this.isAlive = false;
 							block.isAlive = false;
-							//удалять блоки тут?
 							System.out.println("Collision");
 						}
 					}

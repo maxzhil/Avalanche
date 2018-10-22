@@ -118,8 +118,22 @@ public class Model extends Thread {
 	public void addAvalanche() {
 		Thread thread = new Thread(avalanche);
 		thread.start();
-
 		character.addAvalanche(avalanche);
 		threads.add(thread);
+	}
+
+	public void moveRight() {
+		character.moveRight();
+
+	}
+
+	public void moveLeft() {
+		character.moveLeft();
+
+	}
+
+	public void jump() {
+		character.jump();
+
 	}
 }
