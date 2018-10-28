@@ -40,7 +40,7 @@ public class Character extends GameObject implements Runnable {
 					checkInteractWithBlock(CollisionDirection.DOWN);
 					notifyListeners();
 				} catch (ConcurrentModificationException e) {
-					System.out.println("");
+					System.out.print("");
 				}
 			}
 			try {
@@ -85,7 +85,6 @@ public class Character extends GameObject implements Runnable {
 		for (Block block : gameField.getBlocks()) {
 			Rectangle blockRectangle = getRectangle(block);
 			if (characterRectangle.intersects(blockRectangle)) {
-
 				switch (collisionDirection) {
 				case DOWN:
 					if (!block.isDropping()) {
@@ -95,16 +94,10 @@ public class Character extends GameObject implements Runnable {
 							setY(block.getY() - getHeight());
 							canJump = true;
 						}
-						/*
-						 * if (getY() + getHeight() > block.getY() && getY() +
-						 * getHeight() <= block.getY() + block.getHeight() / 2)
-						 * { setY(block.getY() - getHeight()); canJump = true; }
-						 */
 					} else {
 						if (canJump) {
 							isAlive = false;
-						}
-						{
+						} else {
 							if (getY() + getHeight() >= block.getY()
 									&& getY() + getHeight() <= block.getY()
 											+ getHeight() / 2) {
@@ -129,21 +122,11 @@ public class Character extends GameObject implements Runnable {
 					if (getY() <= block.getY() + block.getHeight()
 							&& getY() >= block.getY() + block.getHeight() / 2) {
 						System.out.println("collision with block");
-						setY(block.getY() + block.getHeight() + 1);
-						// gravity();
-						// setY(block.getY() + block.getHeight());
+						setY(block.getY() + block.getHeight());
 						canJump = true;
 					}
-					/*
-					 * if (getY() < block.getY() + block.getHeight() && getY() +
-					 * getHeight() >= block.getY() + block.getHeight() / 2) {
-					 * System.out.println("collision with block");
-					 * setY(block.getY() + block.getHeight() + 1); gravity(); //
-					 * setY(block.getY() + block.getHeight()); canJump = true; }
-					 */
 					break;
 				}
-
 			}
 		}
 	}
@@ -161,13 +144,7 @@ public class Character extends GameObject implements Runnable {
 					this.canJump = false;
 				}
 			}
-		}/*
-		 * earth.moveY(-Integer.parseInt(Resourcer
-		 * .getString("character.jump")));
-		 * checkInteractWithBlock(CollisionDirection.UP); if (avalanche != null)
-		 * { avalanche.changeY(-Integer.parseInt(Resourcer
-		 * .getString("character.jump"))); } this.canJump = false; } }
-		 */
+		}
 	}
 
 	private Rectangle getRectangle(GameObject gameObject) {

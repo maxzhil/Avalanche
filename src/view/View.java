@@ -93,6 +93,8 @@ public class View extends JFrame implements AddBlockListener,
 	@Override
 	public void gameOver() {
 		JOptionPane.showMessageDialog(null, "Game over");
-		System.exit(0);
+
+		new MainMenu();
+
 	}
 }

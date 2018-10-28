@@ -6,7 +6,6 @@ import java.util.List;
 import model.listeners.GameObjectListener;
 
 public class Avalanche extends GameObject implements Runnable {
-
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
 	private Earth earth;
 	private int value = 1;
@@ -36,7 +35,6 @@ public class Avalanche extends GameObject implements Runnable {
 		value++;
 		setY(earth.getY() + earth.getHeight() - value);
 		setHeight(getHeight() + 1);
-
 	}
 
 	public void addListener(GameObjectListener listener) {

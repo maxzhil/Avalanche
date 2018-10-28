@@ -8,14 +8,16 @@ import model.enums.BlockType;
 public class BlockCreator {
 	private static Random random = new Random();
 	private static BlockType[] blockTypes = BlockType.values();
-	private static final int VALUE_START_BLOCK = -150;
+	private static final int VALUE_START_BLOCK = -200;
+	private static final int SPEED_FROM = 1;
+	private static final int SPEED_TO = 3;
 
 	private BlockCreator() {
 	}
 
 	public static Block createBlock(GameField gameField, Earth earth) {
 		Block block = null;
-		switch (blockTypes[random.nextInt(3)]) {
+		switch (blockTypes[random.nextInt(blockTypes.length)]) {
 		case SMALL:
 			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
 					.getString("model.block.small.width"))), VALUE_START_BLOCK,
@@ -23,7 +25,7 @@ public class BlockCreator {
 							.getString("model.block.small.width")),
 					Integer.parseInt(Resourcer
 							.getString("model.block.small.height")), gameField,
-					earth, random.nextInt(3));
+					earth, getRandomForBlockSpeed());
 			block.setColor(Color.BLUE);
 			break;
 		case MIDDLE:
@@ -33,7 +35,7 @@ public class BlockCreator {
 							.getString("model.block.middle.width")),
 					Integer.parseInt(Resourcer
 							.getString("model.block.middle.height")),
-					gameField, earth, random.nextInt(3));
+					gameField, earth, getRandomForBlockSpeed());
 			block.setColor(Color.ORANGE);
 			break;
 		case LARGE:
@@ -43,7 +45,7 @@ public class BlockCreator {
 							.getString("model.block.large.width")),
 					Integer.parseInt(Resourcer
 							.getString("model.block.large.height")), gameField,
-					earth, random.nextInt(3));
+					earth, getRandomForBlockSpeed());
 			block.setColor(Color.DARK_GRAY);
 			break;
 		}
@@ -52,5 +54,9 @@ public class BlockCreator {
 
 	private static int getRandomX(GameField gameField, int width) {
 		return random.nextInt(gameField.getWidth() - width);
+	}
+
+	private static int getRandomForBlockSpeed() {
+		return (int) (Math.random() * (SPEED_TO - SPEED_FROM) + SPEED_FROM);
 	}
 }

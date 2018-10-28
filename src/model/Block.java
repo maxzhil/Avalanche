@@ -27,18 +27,21 @@ public class Block extends GameObject implements Runnable {
 		this.fallingSpeed = fallingSpeed;
 	}
 
-	public List<GameObjectListener> getGameObjectListeners() {
-		return listeners;
-	}
-
-	public void addListener(GameObjectListener listener) {
-		listeners.add(listener);
-	}
-
-	public void notifyListeners() {
-		for (GameObjectListener object : listeners) {
-			object.update(this);
+	@Override
+	public void run() {
+		while (isAlive) {
+			if (!gameField.isPause()) {
+				moveY();
+				checkIntersect();
+				notifyListeners();
+			}
+			try {
+				Thread.sleep(15);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
+		notifyListenersDelete();
 	}
 
 	private void moveY() {
@@ -78,30 +81,10 @@ public class Block extends GameObject implements Runnable {
 
 	}
 
-	private Rectangle getRectangle(Block block) {
-		return new Rectangle(block.getX(), block.getY(), block.getWidth(),
-				block.getHeight());
-	}
-
-	@Override
-	public void run() {
-		while (isAlive) {
-			if (!gameField.isPause()) {
-				moveY();
-				checkIntersect();
-				notifyListeners();
-			}
-			try {
-				Thread.sleep(15);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+	public void notifyListeners() {
+		for (GameObjectListener object : listeners) {
+			object.update(this);
 		}
-		notifyListenersDelete();
-	}
-
-	public void addDeleteBlockListener(DeleteBlockListener deleteBlockListener) {
-		delListeners.add(deleteBlockListener);
 	}
 
 	private void notifyListenersDelete() {
@@ -109,6 +92,23 @@ public class Block extends GameObject implements Runnable {
 			object.deleteBlockListener(this);
 		}
 		gameField.deleteBlock(this);
+	}
+
+	private Rectangle getRectangle(Block block) {
+		return new Rectangle(block.getX(), block.getY(), block.getWidth(),
+				block.getHeight());
+	}
+
+	public List<GameObjectListener> getGameObjectListeners() {
+		return listeners;
+	}
+
+	public void addListener(GameObjectListener listener) {
+		listeners.add(listener);
+	}
+
+	public void addDeleteBlockListener(DeleteBlockListener deleteBlockListener) {
+		delListeners.add(deleteBlockListener);
 	}
 
 	public boolean isDropping() {

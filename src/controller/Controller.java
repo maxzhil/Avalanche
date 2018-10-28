@@ -40,16 +40,16 @@ public class Controller {
 	}
 
 	public void addListenerEarth(GameObjectListener gameObjectListener) {
-		model.getEarth().addListener(gameObjectListener);
+		model.addEarthListener(gameObjectListener);
 
 	}
 
 	public void addListenerCharacter(GameObjectListener gameObjectListener) {
-		model.getGameCharacter().addListener(gameObjectListener);
+		model.addCharacterListener(gameObjectListener);
 	}
 
 	public void addListenerAvalanche(GameObjectListener gameObjectListener) {
-		model.getAvalanche().addListener(gameObjectListener);
+		model.addAvalancheListener(gameObjectListener);
 	}
 
 	public void addBlockListener(AddBlockListener addBlockListener) {

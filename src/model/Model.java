@@ -6,6 +6,7 @@ import java.util.Random;
 
 import model.listeners.AddBlockListener;
 import model.listeners.DeleteBlockListener;
+import model.listeners.GameObjectListener;
 import model.listeners.GameOverListener;
 
 public class Model extends Thread {
@@ -52,20 +53,14 @@ public class Model extends Thread {
 		notifyGameOverListener();
 	}
 
-	private void notifyGameOverListener() {
-		gameOverListener.gameOver();
+	private void createEarthThread() {
+		Thread threadEarth = new Thread(earth);
+		threadEarth.start();
 	}
 
-	public void addBlockListener(AddBlockListener addBlockListener) {
-		listeners.add(addBlockListener);
-	}
-
-	public void addDeleteBlockListener(DeleteBlockListener addBlockListener) {
-		deleteBlockListeners.add(addBlockListener);
-	}
-
-	public void addGameOverListener(GameOverListener gameOverListener) {
-		this.gameOverListener = gameOverListener;
+	private void createCharacterThread() {
+		Thread threadCharacter = new Thread(character);
+		threadCharacter.start();
 	}
 
 	public void addBlock() {
@@ -78,32 +73,14 @@ public class Model extends Thread {
 		notifyAddBlockListener(block);
 	}
 
+	private void notifyGameOverListener() {
+		gameOverListener.gameOver();
+	}
+
 	public void notifyAddBlockListener(Block block) {
 		for (AddBlockListener addBlockListener : listeners) {
 			addBlockListener.addBlock(block);
 		}
-	}
-
-	public Character getGameCharacter() {
-		return character;
-	}
-
-	private void createEarthThread() {
-		Thread threadEarth = new Thread(earth);
-		threadEarth.start();
-	}
-
-	private void createCharacterThread() {
-		Thread threadCharacter = new Thread(character);
-		threadCharacter.start();
-	}
-
-	public Earth getEarth() {
-		return this.earth;
-	}
-
-	public Avalanche getAvalanche() {
-		return avalanche;
 	}
 
 	public GameField getGameField() {
@@ -134,6 +111,29 @@ public class Model extends Thread {
 
 	public void jump() {
 		character.jump();
+	}
 
+	public void addBlockListener(AddBlockListener addBlockListener) {
+		listeners.add(addBlockListener);
+	}
+
+	public void addDeleteBlockListener(DeleteBlockListener addBlockListener) {
+		deleteBlockListeners.add(addBlockListener);
+	}
+
+	public void addGameOverListener(GameOverListener gameOverListener) {
+		this.gameOverListener = gameOverListener;
+	}
+
+	public void addEarthListener(GameObjectListener gameObjectListener) {
+		earth.addListener(gameObjectListener);
+	}
+
+	public void addCharacterListener(GameObjectListener gameObjectListener) {
+		character.addListener(gameObjectListener);
+	}
+
+	public void addAvalancheListener(GameObjectListener gameObjectListener) {
+		avalanche.addListener(gameObjectListener);
 	}
 }
