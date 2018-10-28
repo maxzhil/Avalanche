@@ -92,7 +92,7 @@ public class Block extends GameObject implements Runnable {
 				notifyListeners();
 			}
 			try {
-				Thread.sleep(10);
+				Thread.sleep(15);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

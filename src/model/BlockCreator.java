@@ -3,6 +3,8 @@ package model;
 import java.awt.Color;
 import java.util.Random;
 
+import model.enums.BlockType;
+
 public class BlockCreator {
 	private static Random random = new Random();
 	private static BlockType[] blockTypes = BlockType.values();

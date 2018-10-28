@@ -23,9 +23,22 @@ public class Earth extends GameObject implements Runnable {
 		for (Block block : gameField.getBlocks()) {
 			if (!block.isDropping()) {
 				block.setY(block.getY() - value);
-			} else {
-				block.changeY(value);
+			}else{
+				block.setY(block.getY() - value);
 			}
+			/*
+			 * for (int i = 0; i < Math.abs(value); i++) { if
+			 * (!block.isDropping()) { if (value < 0) { block.setY(block.getY()
+			 * +value); } else { block.setY(block.getY() - value); } }
+			 * 
+			 * }
+			 */
+			/*
+			 * if (value < 0) { if (!block.isDropping()) {
+			 * block.setY(block.getY() + i); } else { block.changeY(-i); } }
+			 * else { if (!block.isDropping()) { block.setY(block.getY() - i); }
+			 * else { block.changeY(i); } }
+			 */
 		}
 	}
 
@@ -34,7 +47,7 @@ public class Earth extends GameObject implements Runnable {
 		while (true) {
 			notifyListeners();
 			try {
-				Thread.sleep(10);
+				Thread.sleep(15);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
