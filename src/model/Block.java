@@ -11,13 +11,13 @@ import model.listeners.GameObjectListener;
 
 public class Block extends GameObject implements Runnable {
 	private boolean isAlive = true;
-	private Color color;
 	private boolean isDropping = true;
+	private Color color;
 	private int fallingSpeed;
 	private GameField gameField;
 	private Earth earth;
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
-	private List<DeleteBlockListener> delListeners = new ArrayList<DeleteBlockListener>();
+	private List<DeleteBlockListener> deleteListeners = new ArrayList<DeleteBlockListener>();
 
 	public Block(int x, int y, int width, int height, GameField gameField,
 			Earth earth, int fallingSpeed) {
@@ -88,7 +88,7 @@ public class Block extends GameObject implements Runnable {
 	}
 
 	private void notifyListenersDelete() {
-		for (DeleteBlockListener object : delListeners) {
+		for (DeleteBlockListener object : deleteListeners) {
 			object.deleteBlockListener(this);
 		}
 		gameField.deleteBlock(this);
@@ -108,7 +108,7 @@ public class Block extends GameObject implements Runnable {
 	}
 
 	public void addDeleteBlockListener(DeleteBlockListener deleteBlockListener) {
-		delListeners.add(deleteBlockListener);
+		deleteListeners.add(deleteBlockListener);
 	}
 
 	public boolean isDropping() {

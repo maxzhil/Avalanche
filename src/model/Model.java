@@ -8,6 +8,7 @@ import model.listeners.AddBlockListener;
 import model.listeners.DeleteBlockListener;
 import model.listeners.GameObjectListener;
 import model.listeners.GameOverListener;
+import model.listeners.HeightScoreListener;
 
 public class Model extends Thread {
 	private boolean isPause = false;
@@ -17,7 +18,7 @@ public class Model extends Thread {
 	private Earth earth;
 	private Avalanche avalanche;
 	private List<Thread> threads = new ArrayList<Thread>();
-	private List<AddBlockListener> listeners = new ArrayList<AddBlockListener>();
+	private List<AddBlockListener> addBlockListeners = new ArrayList<AddBlockListener>();
 	private List<DeleteBlockListener> deleteBlockListeners = new ArrayList<DeleteBlockListener>();
 	private GameOverListener gameOverListener;
 
@@ -78,7 +79,7 @@ public class Model extends Thread {
 	}
 
 	public void notifyAddBlockListener(Block block) {
-		for (AddBlockListener addBlockListener : listeners) {
+		for (AddBlockListener addBlockListener : addBlockListeners) {
 			addBlockListener.addBlock(block);
 		}
 	}
@@ -114,7 +115,7 @@ public class Model extends Thread {
 	}
 
 	public void addBlockListener(AddBlockListener addBlockListener) {
-		listeners.add(addBlockListener);
+		addBlockListeners.add(addBlockListener);
 	}
 
 	public void addDeleteBlockListener(DeleteBlockListener addBlockListener) {
@@ -136,4 +137,9 @@ public class Model extends Thread {
 	public void addAvalancheListener(GameObjectListener gameObjectListener) {
 		avalanche.addListener(gameObjectListener);
 	}
+
+	public void addHeightScoreListener(HeightScoreListener heightScoreListener) {
+		this.character.addHeightScoreListener(heightScoreListener);
+	}
+
 }

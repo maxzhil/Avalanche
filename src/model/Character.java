@@ -9,14 +9,17 @@ import model.GameField;
 import model.GameObject;
 import model.enums.CollisionDirection;
 import model.listeners.GameObjectListener;
+import model.listeners.HeightScoreListener;
 
 public class Character extends GameObject implements Runnable {
 	private GameField gameField;
 	private Earth earth;
 	private Avalanche avalanche;
+	private int heightScore;
 	private boolean canJump = true;
 	private boolean isAlive = true;
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
+	private HeightScoreListener heightScoreListener = null;
 
 	public Character(int x, int y, int width, int height, GameField gameField,
 			Earth earth) {
@@ -39,6 +42,8 @@ public class Character extends GameObject implements Runnable {
 					checkInteractWithAvalanche();
 					checkInteractWithBlock(CollisionDirection.DOWN);
 					notifyListeners();
+					getCurrentHeightScore();
+					notifyHeightScore();
 				} catch (ConcurrentModificationException e) {
 					System.out.print("");
 				}
@@ -49,6 +54,10 @@ public class Character extends GameObject implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private void getCurrentHeightScore() {
+		heightScore = earth.getY() - (getY() + getHeight());
 	}
 
 	private void checkPositionY() {
@@ -102,7 +111,6 @@ public class Character extends GameObject implements Runnable {
 									&& getY() + getHeight() <= block.getY()
 											+ getHeight() / 2) {
 								setY(block.getY() - getHeight());
-								
 							}
 						}
 					}
@@ -121,7 +129,6 @@ public class Character extends GameObject implements Runnable {
 				case UP:
 					if (getY() <= block.getY() + block.getHeight()
 							&& getY() >= block.getY() + block.getHeight() / 2) {
-						System.out.println("collision with block");
 						setY(block.getY() + block.getHeight());
 						canJump = true;
 					}
@@ -186,5 +193,15 @@ public class Character extends GameObject implements Runnable {
 
 	public void addAvalanche(Avalanche avalanche) {
 		this.avalanche = avalanche;
+	}
+
+	public void addHeightScoreListener(HeightScoreListener heightScoreListener) {
+		this.heightScoreListener = heightScoreListener;
+	}
+
+	public void notifyHeightScore() {
+		if (heightScoreListener != null) {
+			this.heightScoreListener.updateHeightScore(heightScore);
+		}
 	}
 }

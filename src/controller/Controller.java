@@ -5,6 +5,7 @@ import model.listeners.AddBlockListener;
 import model.listeners.DeleteBlockListener;
 import model.listeners.GameObjectListener;
 import model.listeners.GameOverListener;
+import model.listeners.HeightScoreListener;
 
 public class Controller {
 
@@ -39,16 +40,16 @@ public class Controller {
 
 	}
 
-	public void addListenerEarth(GameObjectListener gameObjectListener) {
+	public void addEarthListener(GameObjectListener gameObjectListener) {
 		model.addEarthListener(gameObjectListener);
 
 	}
 
-	public void addListenerCharacter(GameObjectListener gameObjectListener) {
+	public void addCharacterListener(GameObjectListener gameObjectListener) {
 		model.addCharacterListener(gameObjectListener);
 	}
 
-	public void addListenerAvalanche(GameObjectListener gameObjectListener) {
+	public void addAvalancheListener(GameObjectListener gameObjectListener) {
 		model.addAvalancheListener(gameObjectListener);
 	}
 
@@ -63,6 +64,11 @@ public class Controller {
 
 	public void addDeleteBlockListener(DeleteBlockListener deleteBlockListener) {
 		model.addDeleteBlockListener(deleteBlockListener);
+
+	}
+
+	public void addHeightScoreListener(HeightScoreListener heightScoreListener) {
+		model.addHeightScoreListener(heightScoreListener);
 
 	}
 
