@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Block;
+import model.listeners.RemoteBlocksCountListener;
 
 public class GameField {
 	private int height;
 	private int width;
 	private boolean isPause = false;
 	private volatile List<Block> blocks = new ArrayList<Block>();
+	private RemoteBlocksCountListener remoteBlocksCountListener;
+	private int countRemoteBlocks;
 
 	public GameField(int width, int height) {
 		this.width = width;
@@ -26,6 +29,8 @@ public class GameField {
 
 	public synchronized void deleteBlock(Block block) {
 		blocks.remove(block);
+		countRemoteBlocks++;
+		notifyRemoteBlocksCountListener();
 	}
 
 	public void setBlocks(List<Block> blocks) {
@@ -46,6 +51,18 @@ public class GameField {
 
 	public void setPause(boolean isPause) {
 		this.isPause = isPause;
+	}
+
+	private void notifyRemoteBlocksCountListener() {
+		if (remoteBlocksCountListener != null) {
+			remoteBlocksCountListener
+					.updateRemoteBlocksCount(countRemoteBlocks);
+		}
+	}
+
+	public void addRemoteBlocksCountListener(
+			RemoteBlocksCountListener remoteBlocksCountListener) {
+		this.remoteBlocksCountListener = remoteBlocksCountListener;
 	}
 
 }

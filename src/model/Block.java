@@ -61,24 +61,19 @@ public class Block extends GameObject implements Runnable {
 			for (Block block : gameField.getBlocks()) {
 				Rectangle rectangleBlockFromIterator = getRectangle(block);
 				if (!block.equals(this)) {
-					if (!block.isDropping) {
-						if (rectangleThisBlock
-								.intersects(rectangleBlockFromIterator)) {
+					if (rectangleThisBlock
+							.intersects(rectangleBlockFromIterator)) {
+						if (!block.isDropping) {
 							setY(block.getY() - getHeight());
 							isDropping = false;
-						}
-					} else {
-						if (rectangleThisBlock
-								.intersects(rectangleBlockFromIterator)) {
+						} else {
 							this.isAlive = false;
 							block.isAlive = false;
-							System.out.println("Collision");
 						}
 					}
 				}
 			}
 		}
-
 	}
 
 	public void notifyListeners() {
@@ -88,8 +83,8 @@ public class Block extends GameObject implements Runnable {
 	}
 
 	private void notifyListenersDelete() {
-		for (DeleteBlockListener object : deleteListeners) {
-			object.deleteBlockListener(this);
+		for (DeleteBlockListener deleteBlockListener : deleteListeners) {
+			deleteBlockListener.deleteBlockListener(this);
 		}
 		gameField.deleteBlock(this);
 	}

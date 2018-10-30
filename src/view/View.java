@@ -14,6 +14,7 @@ import view.panel.BlockPanel;
 import view.panel.CharacterPanel;
 import view.panel.EarthPanel;
 import view.panel.HeightScorePanel;
+import view.panel.RemoteBlocksCountPanel;
 import controller.Controller;
 import controller.KeyHandler;
 import model.Block;
@@ -34,6 +35,8 @@ public class View extends JFrame implements AddBlockListener,
 	private CharacterPanel characterPanel;
 	private EarthPanel earthPanel;
 	private AvalanchePanel avalanchePanel;
+	private HeightScorePanel heightScorePanel;
+	private RemoteBlocksCountPanel remoteBlocksCountPanel;
 
 	private List<BlockPanel> blockPanels = new ArrayList<BlockPanel>();
 
@@ -49,32 +52,26 @@ public class View extends JFrame implements AddBlockListener,
 		gameFieldPanel.setPreferredSize(new Dimension(model.getGameField()
 				.getWidth(), model.getGameField().getHeight()));
 		this.setLayout(new BorderLayout());
-		this.getContentPane().add(gameFieldPanel, BorderLayout.CENTER);
-
 		characterPanel = new CharacterPanel();
 		earthPanel = new EarthPanel();
 		avalanchePanel = new AvalanchePanel();
-		JPanel panel = new JPanel();
-
-		HeightScorePanel heightScorePanel = new HeightScorePanel();
-		panel.add(heightScorePanel);
-		this.getContentPane().add(panel, BorderLayout.NORTH);
+		JPanel informationPanel = new JPanel();
+		remoteBlocksCountPanel = new RemoteBlocksCountPanel();
+		heightScorePanel = new HeightScorePanel();
+		informationPanel.add(heightScorePanel);
+		informationPanel.add(remoteBlocksCountPanel);
+		this.getContentPane().add(informationPanel, BorderLayout.NORTH);
 		gameFieldPanel.add(characterPanel);
 		gameFieldPanel.add(earthPanel);
 		gameFieldPanel.add(avalanchePanel);
+		this.getContentPane().add(gameFieldPanel, BorderLayout.CENTER);
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				new KeyHandler(controller).keyPressed(e.getKeyCode());
 			}
 		});
-		controller.addHeightScoreListener(heightScorePanel);
-		controller.addEarthListener(earthPanel);
-		controller.addCharacterListener(characterPanel);
-		controller.addAvalancheListener(avalanchePanel);
-		controller.addBlockListener(this);
-		controller.addGameOverListener(this);
-		controller.addDeleteBlockListener(this);
+		initializeListeners();
 		pack();
 		this.setLocationRelativeTo(null);
 	}
@@ -103,8 +100,19 @@ public class View extends JFrame implements AddBlockListener,
 	@Override
 	public void gameOver() {
 		JOptionPane.showMessageDialog(null, "Game over");
-
+		this.setVisible(false);
 		new MainMenu();
 
+	}
+
+	private void initializeListeners() {
+		controller.addHeightScoreListener(heightScorePanel);
+		controller.addRemoteBlocksCountListener(remoteBlocksCountPanel);
+		controller.addEarthListener(earthPanel);
+		controller.addCharacterListener(characterPanel);
+		controller.addAvalancheListener(avalanchePanel);
+		controller.addBlockListener(this);
+		controller.addGameOverListener(this);
+		controller.addDeleteBlockListener(this);
 	}
 }

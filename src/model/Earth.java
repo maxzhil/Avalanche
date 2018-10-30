@@ -19,14 +19,10 @@ public class Earth extends GameObject implements Runnable {
 	}
 
 	public void moveY(int value) {
-		changeY(value);
 		for (Block block : gameField.getBlocks()) {
-			if (!block.isDropping()) {
-				block.setY(block.getY() - value);
-			} else {
-				block.setY(block.getY() - value);
-			}
+			block.setY(block.getY() - value);
 		}
+		changeY(value);
 	}
 
 	@Override

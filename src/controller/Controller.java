@@ -6,6 +6,7 @@ import model.listeners.DeleteBlockListener;
 import model.listeners.GameObjectListener;
 import model.listeners.GameOverListener;
 import model.listeners.HeightScoreListener;
+import model.listeners.RemoteBlocksCountListener;
 
 public class Controller {
 
@@ -70,6 +71,11 @@ public class Controller {
 	public void addHeightScoreListener(HeightScoreListener heightScoreListener) {
 		model.addHeightScoreListener(heightScoreListener);
 
+	}
+
+	public void addRemoteBlocksCountListener(
+			RemoteBlocksCountListener remoteBlocksCountListener) {
+		model.addRemoteBlocksCountListener(remoteBlocksCountListener);
 	}
 
 }

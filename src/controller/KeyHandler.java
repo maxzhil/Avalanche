@@ -19,12 +19,11 @@ public class KeyHandler {
 		if (key == KeyAdapter.getKeyCode(Resourcer.getString("key.up"))) {
 			controller.jump();
 		}
-		if (key == 101) {
-			//TODO add avalanche not pressing key
-			controller.addAvalanche();
-		}
-		if (key == KeyAdapter.getKeyCode(Resourcer.getString("key.down"))) {
+		if (key == KeyAdapter.getKeyCode(Resourcer.getString("key.p"))) {
 			controller.pause();
+		}
+		if (key == KeyAdapter.getKeyCode(Resourcer.getString("key.space"))) {
+			controller.addAvalanche();
 		}
 	}
 

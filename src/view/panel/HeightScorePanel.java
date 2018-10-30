@@ -15,14 +15,14 @@ public class HeightScorePanel extends JPanel implements HeightScoreListener {
 
 	public HeightScorePanel() {
 		super();
-		setLocation(0, 50);
-		setPreferredSize(new Dimension(320, 40));
+		setLocation(0, 0);
+		setPreferredSize(new Dimension(200, 20));
 		setLayout(null);
 		setOpaque(false);
 		heightScoreText = new JLabel();
 		heightScoreText.setForeground(Color.BLACK);
 		heightScoreText.setLocation(0, 0);
-		heightScoreText.setSize(320, 40);
+		heightScoreText.setSize(200, 20);
 		this.add(heightScoreText);
 	}
 

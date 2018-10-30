@@ -9,6 +9,7 @@ import model.listeners.DeleteBlockListener;
 import model.listeners.GameObjectListener;
 import model.listeners.GameOverListener;
 import model.listeners.HeightScoreListener;
+import model.listeners.RemoteBlocksCountListener;
 
 public class Model extends Thread {
 	private boolean isPause = false;
@@ -140,6 +141,11 @@ public class Model extends Thread {
 
 	public void addHeightScoreListener(HeightScoreListener heightScoreListener) {
 		this.character.addHeightScoreListener(heightScoreListener);
+	}
+
+	public void addRemoteBlocksCountListener(
+			RemoteBlocksCountListener remoteBlocksCountListener) {
+		gameField.addRemoteBlocksCountListener(remoteBlocksCountListener);
 	}
 
 }

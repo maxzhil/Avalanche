@@ -41,11 +41,9 @@ public class Character extends GameObject implements Runnable {
 					gravity();
 					checkInteractWithAvalanche();
 					checkInteractWithBlock(CollisionDirection.DOWN);
+					notifyHeightScoreListener();
 					notifyListeners();
-					getCurrentHeightScore();
-					notifyHeightScore();
 				} catch (ConcurrentModificationException e) {
-					System.out.print("");
 				}
 			}
 			try {
@@ -96,45 +94,55 @@ public class Character extends GameObject implements Runnable {
 			if (characterRectangle.intersects(blockRectangle)) {
 				switch (collisionDirection) {
 				case DOWN:
-					if (!block.isDropping()) {
-						if (getY() + getHeight() >= block.getY()
-								&& getY() + getHeight() <= block.getY()
-										+ getHeight() / 2) {
-							setY(block.getY() - getHeight());
-							canJump = true;
-						}
-					} else {
-						if (canJump) {
-							isAlive = false;
-						} else {
-							if (getY() + getHeight() >= block.getY()
-									&& getY() + getHeight() <= block.getY()
-											+ getHeight() / 2) {
-								setY(block.getY() - getHeight());
-							}
-						}
-					}
+					checkAlive(block);
+					checkInteractWithBlockDown(block);
 					break;
 				case LEFT:
-					if (getX() <= block.getX() + block.getWidth()) {
-						setX(block.getX() + block.getWidth());
-						return;
-					}
+					checkInteractWithBlockLeft(block);
 					break;
 				case RIGHT:
-					if (getX() + getWidth() >= block.getX()) {
-						setX(block.getX() - getWidth());
-					}
+					checkInteractWithBlockRight(block);
 					break;
 				case UP:
-					if (getY() <= block.getY() + block.getHeight()
-							&& getY() >= block.getY() + block.getHeight() / 2) {
-						setY(block.getY() + block.getHeight());
-						canJump = true;
-					}
+					checkInteractWithBlockUp(block);
 					break;
 				}
 			}
+		}
+	}
+
+	private void checkAlive(Block block) {
+		if (block.getY() + block.getHeight() >= getY()
+				&& block.getY() + block.getHeight() <= getY() + getHeight() / 2) {
+			isAlive = false;
+		}
+	}
+
+	private void checkInteractWithBlockDown(Block block) {
+		if (getY() + getHeight() >= block.getY()
+				&& getY() + getHeight() <= block.getY() + getHeight() / 2) {
+			setY(block.getY() - getHeight());
+			canJump = true;
+		}
+	}
+
+	private void checkInteractWithBlockLeft(Block block) {
+		if (getX() <= block.getX() + block.getWidth()) {
+			setX(block.getX() + block.getWidth());
+		}
+	}
+
+	private void checkInteractWithBlockRight(Block block) {
+		if (getX() + getWidth() >= block.getX()) {
+			setX(block.getX() - getWidth());
+		}
+	}
+
+	private void checkInteractWithBlockUp(Block block) {
+		if (getY() <= block.getY() + block.getHeight()
+				&& getY() >= block.getY() + block.getHeight() / 2) {
+			setY(block.getY() + block.getHeight());
+			canJump = true;
 		}
 	}
 
@@ -165,20 +173,20 @@ public class Character extends GameObject implements Runnable {
 		setX(getX()
 				- Integer
 						.parseInt(Resourcer.getString("character.move.toward")));
-		checkInteractWithBlock(CollisionDirection.LEFT);
 		if (getX() <= 0) {
 			setX(gameField.getWidth() - getWidth());
 		}
+		checkInteractWithBlock(CollisionDirection.LEFT);
 	}
 
 	public void moveRight() {
 		setX(getX()
 				+ Integer
 						.parseInt(Resourcer.getString("character.move.toward")));
-		checkInteractWithBlock(CollisionDirection.RIGHT);
 		if (getX() + getWidth() >= gameField.getWidth()) {
 			setX(0);
 		}
+		checkInteractWithBlock(CollisionDirection.RIGHT);
 	}
 
 	public void notifyListeners() {
@@ -196,10 +204,14 @@ public class Character extends GameObject implements Runnable {
 	}
 
 	public void addHeightScoreListener(HeightScoreListener heightScoreListener) {
-		this.heightScoreListener = heightScoreListener;
+		if (this.heightScoreListener == null) {
+			this.heightScoreListener = heightScoreListener;
+		}
+
 	}
 
-	public void notifyHeightScore() {
+	public void notifyHeightScoreListener() {
+		getCurrentHeightScore();
 		if (heightScoreListener != null) {
 			this.heightScoreListener.updateHeightScore(heightScore);
 		}
