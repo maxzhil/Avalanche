@@ -140,7 +140,7 @@ public class Model extends Thread {
 	}
 
 	public void addHeightScoreListener(HeightScoreListener heightScoreListener) {
-		this.character.addHeightScoreListener(heightScoreListener);
+		character.addHeightScoreListener(heightScoreListener);
 	}
 
 	public void addRemoteBlocksCountListener(

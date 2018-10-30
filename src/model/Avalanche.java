@@ -42,8 +42,8 @@ public class Avalanche extends GameObject implements Runnable {
 	}
 
 	public void notifyListeners() {
-		for (GameObjectListener object : listeners) {
-			object.update(this);
+		for (GameObjectListener gameObject : listeners) {
+			gameObject.update(this);
 		}
 	}
 

@@ -8,7 +8,6 @@ import model.enums.BlockType;
 public class BlockCreator {
 	private static Random random = new Random();
 	private static BlockType[] blockTypes = BlockType.values();
-	private static final int VALUE_START_BLOCK = -200;
 	private static final int SPEED_FROM = 1;
 	private static final int SPEED_TO = 3;
 
@@ -20,7 +19,8 @@ public class BlockCreator {
 		switch (blockTypes[random.nextInt(blockTypes.length)]) {
 		case SMALL:
 			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.small.width"))), VALUE_START_BLOCK,
+					.getString("model.block.small.width"))),
+					Integer.parseInt(Resourcer.getString("value.start.block")),
 					Integer.parseInt(Resourcer
 							.getString("model.block.small.width")),
 					Integer.parseInt(Resourcer
@@ -31,7 +31,8 @@ public class BlockCreator {
 		case MIDDLE:
 			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
 					.getString("model.block.middle.width"))),
-					VALUE_START_BLOCK, Integer.parseInt(Resourcer
+					Integer.parseInt(Resourcer.getString("value.start.block")),
+					Integer.parseInt(Resourcer
 							.getString("model.block.middle.width")),
 					Integer.parseInt(Resourcer
 							.getString("model.block.middle.height")),
@@ -40,7 +41,8 @@ public class BlockCreator {
 			break;
 		case LARGE:
 			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.large.width"))), VALUE_START_BLOCK,
+					.getString("model.block.large.width"))),
+					Integer.parseInt(Resourcer.getString("value.start.block")),
 					Integer.parseInt(Resourcer
 							.getString("model.block.large.width")),
 					Integer.parseInt(Resourcer

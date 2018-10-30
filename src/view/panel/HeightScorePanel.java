@@ -28,6 +28,7 @@ public class HeightScorePanel extends JPanel implements HeightScoreListener {
 
 	@Override
 	public void updateHeightScore(int heightScore) {
+
 		heightScoreText.setText(String.format("%s %d",
 				Resourcer.getString("height.score"), heightScore));
 	}

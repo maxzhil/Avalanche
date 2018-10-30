@@ -10,7 +10,7 @@ public class GameField {
 	private int height;
 	private int width;
 	private boolean isPause = false;
-	private volatile List<Block> blocks = new ArrayList<Block>();
+	private List<Block> blocks = new ArrayList<Block>();
 	private RemoteBlocksCountListener remoteBlocksCountListener;
 	private int countRemoteBlocks;
 

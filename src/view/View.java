@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -32,6 +33,7 @@ public class View extends JFrame implements AddBlockListener,
 	private Model model;
 	private Controller controller;
 	private JPanel gameFieldPanel;
+	private JPanel informationPanel;
 	private CharacterPanel characterPanel;
 	private EarthPanel earthPanel;
 	private AvalanchePanel avalanchePanel;
@@ -48,29 +50,24 @@ public class View extends JFrame implements AddBlockListener,
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
-		gameFieldPanel = new JPanel();
-		gameFieldPanel.setPreferredSize(new Dimension(model.getGameField()
-				.getWidth(), model.getGameField().getHeight()));
 		this.setLayout(new BorderLayout());
 		characterPanel = new CharacterPanel();
 		earthPanel = new EarthPanel();
 		avalanchePanel = new AvalanchePanel();
-		JPanel informationPanel = new JPanel();
 		remoteBlocksCountPanel = new RemoteBlocksCountPanel();
 		heightScorePanel = new HeightScorePanel();
-		informationPanel.add(heightScorePanel);
-		informationPanel.add(remoteBlocksCountPanel);
+		initializeGameFieldPanel();
+		initializeInformationPanel();
 		this.getContentPane().add(informationPanel, BorderLayout.NORTH);
-		gameFieldPanel.add(characterPanel);
-		gameFieldPanel.add(earthPanel);
-		gameFieldPanel.add(avalanchePanel);
 		this.getContentPane().add(gameFieldPanel, BorderLayout.CENTER);
+
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				new KeyHandler(controller).keyPressed(e.getKeyCode());
 			}
 		});
+
 		initializeListeners();
 		pack();
 		this.setLocationRelativeTo(null);
@@ -103,6 +100,22 @@ public class View extends JFrame implements AddBlockListener,
 		this.setVisible(false);
 		new MainMenu();
 
+	}
+
+	private void initializeGameFieldPanel() {
+		gameFieldPanel = new JPanel();
+		gameFieldPanel.setPreferredSize(new Dimension(model.getGameField()
+				.getWidth(), model.getGameField().getHeight()));
+		gameFieldPanel.add(characterPanel);
+		gameFieldPanel.add(earthPanel);
+		gameFieldPanel.add(avalanchePanel);
+	}
+
+	private void initializeInformationPanel() {
+		informationPanel = new JPanel();
+		informationPanel.setBackground(Color.WHITE);
+		informationPanel.add(heightScorePanel);
+		informationPanel.add(remoteBlocksCountPanel);
 	}
 
 	private void initializeListeners() {
