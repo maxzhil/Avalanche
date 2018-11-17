@@ -2,7 +2,6 @@ package model;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import model.GameField;
@@ -19,7 +18,7 @@ public class Character extends GameObject implements Runnable {
 	private boolean canJump = true;
 	private boolean isAlive = true;
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
-	private HeightScoreListener heightScoreListener = null;
+	private List<HeightScoreListener> heightScoreListeners = new ArrayList<HeightScoreListener>();
 
 	public Character(int x, int y, int width, int height, GameField gameField,
 			Earth earth) {
@@ -36,15 +35,12 @@ public class Character extends GameObject implements Runnable {
 	public void run() {
 		while (isAlive) {
 			if (!gameField.isPause()) {
-				try {
-					checkPositionY();
-					gravity();
-					checkInteractWithAvalanche();
-					checkInteractWithBlock(CollisionDirection.DOWN);
-					notifyHeightScoreListener();
-					notifyListeners();
-				} catch (ConcurrentModificationException e) {
-				}
+				checkPositionY();
+				gravity();
+				checkInteractWithAvalanche();
+				checkInteractWithBlock(CollisionDirection.DOWN);
+				notifyListeners();
+				notifyHeightScoreListener();
 			}
 			try {
 				Thread.sleep(10);
@@ -52,6 +48,7 @@ public class Character extends GameObject implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		notifyListeners();
 	}
 
 	private void getCurrentHeightScore() {
@@ -153,12 +150,16 @@ public class Character extends GameObject implements Runnable {
 						.getString("character.jump"))); i++) {
 					earth.moveY(-i);
 					checkInteractWithBlock(CollisionDirection.UP);
-					if (avalanche != null) {
-						avalanche.changeY(-i);
-					}
+					moveAvalanche(-i);
 					this.canJump = false;
 				}
 			}
+		}
+	}
+
+	private void moveAvalanche(int value) {
+		if (avalanche != null) {
+			avalanche.changeY(value);
 		}
 	}
 
@@ -173,9 +174,7 @@ public class Character extends GameObject implements Runnable {
 		setX(getX()
 				- Integer
 						.parseInt(Resourcer.getString("character.move.toward")));
-		if (getX() <= 0) {
-			setX(gameField.getWidth() - getWidth());
-		}
+		checkGameFieldWidth(CollisionDirection.LEFT);
 		checkInteractWithBlock(CollisionDirection.LEFT);
 	}
 
@@ -183,10 +182,23 @@ public class Character extends GameObject implements Runnable {
 		setX(getX()
 				+ Integer
 						.parseInt(Resourcer.getString("character.move.toward")));
-		if (getX() + getWidth() >= gameField.getWidth()) {
-			setX(0);
-		}
+		checkGameFieldWidth(CollisionDirection.RIGHT);
 		checkInteractWithBlock(CollisionDirection.RIGHT);
+	}
+
+	private void checkGameFieldWidth(CollisionDirection collisionDirection) {
+		switch (collisionDirection) {
+		case RIGHT:
+			if (getX() + getWidth() >= gameField.getWidth()) {
+				setX(0);
+			}
+			break;
+		case LEFT:
+			if (getX() <= 0) {
+				setX(gameField.getWidth() - getWidth());
+			}
+			break;
+		}
 	}
 
 	public void notifyListeners() {
@@ -204,16 +216,13 @@ public class Character extends GameObject implements Runnable {
 	}
 
 	public void addHeightScoreListener(HeightScoreListener heightScoreListener) {
-		if (this.heightScoreListener == null) {
-			this.heightScoreListener = heightScoreListener;
-		}
-
+		this.heightScoreListeners.add(heightScoreListener);
 	}
 
 	public void notifyHeightScoreListener() {
 		getCurrentHeightScore();
-		if (heightScoreListener != null) {
-			this.heightScoreListener.updateHeightScore(heightScore);
+		for (HeightScoreListener heightScoreListener : heightScoreListeners) {
+			heightScoreListener.updateHeightScore(heightScore);
 		}
 	}
 }

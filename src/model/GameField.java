@@ -1,7 +1,7 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import model.Block;
 import model.listeners.RemoteBlocksCountListener;
@@ -10,7 +10,7 @@ public class GameField {
 	private int height;
 	private int width;
 	private boolean isPause = false;
-	private List<Block> blocks = new ArrayList<Block>();
+	private List<Block> blocks = new CopyOnWriteArrayList<Block>();
 	private RemoteBlocksCountListener remoteBlocksCountListener;
 	private int countRemoteBlocks;
 
@@ -19,7 +19,7 @@ public class GameField {
 		this.height = height;
 	}
 
-	public synchronized List<Block> getBlocks() {
+	public List<Block> getBlocks() {
 		return blocks;
 	}
 
@@ -27,10 +27,9 @@ public class GameField {
 		blocks.add(block);
 	}
 
-	public synchronized void deleteBlock(Block block) {
+	public void deleteBlock(Block block) {
 		blocks.remove(block);
-		countRemoteBlocks++;
-		notifyRemoteBlocksCountListener();
+		calculateRemoteBlocks();
 	}
 
 	public void setBlocks(List<Block> blocks) {
@@ -63,6 +62,11 @@ public class GameField {
 	public void addRemoteBlocksCountListener(
 			RemoteBlocksCountListener remoteBlocksCountListener) {
 		this.remoteBlocksCountListener = remoteBlocksCountListener;
+	}
+
+	private void calculateRemoteBlocks() {
+		countRemoteBlocks++;
+		notifyRemoteBlocksCountListener();
 	}
 
 }

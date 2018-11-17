@@ -1,4 +1,4 @@
-package model;
+package utils;
 
 import java.awt.Dimension;
 import java.awt.Image;
@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+
+import model.Resourcer;
 
 public class ImageWorker {
 

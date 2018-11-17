@@ -7,8 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import utils.ImageWorker;
 import controller.Controller;
-import model.ImageWorker;
 import model.Model;
 import model.Resourcer;
 
@@ -69,7 +70,6 @@ public class MainMenu extends JFrame {
 		});
 		mainPanel.add(playButton);
 		mainPanel.add(exitButton);
-
 		mainPanel.add(backgroundImageLabel);
 		this.getContentPane().add(mainPanel);
 		this.pack();

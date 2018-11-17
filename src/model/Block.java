@@ -58,6 +58,7 @@ public class Block extends GameObject implements Runnable {
 	private void checkIntersect() {
 		if (this.isDropping) {
 			Rectangle rectangleThisBlock = getRectangle(this);
+
 			for (Block block : gameField.getBlocks()) {
 				Rectangle rectangleBlockFromIterator = getRectangle(block);
 				if (!block.equals(this)) {

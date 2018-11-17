@@ -24,7 +24,7 @@ public class GameObject {
 		this.x = x;
 	}
 
-	public synchronized int getY() {
+	public int getY() {
 		return y;
 	}
 
