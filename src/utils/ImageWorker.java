@@ -13,7 +13,6 @@ import model.Resourcer;
 public class ImageWorker {
 
 	private ImageWorker() {
-
 	}
 
 	public static ImageIcon getBackgroundImage(Dimension size) {

@@ -1,6 +1,8 @@
 package model;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.Random;
 
 import model.enums.BlockType;
@@ -18,36 +20,42 @@ public class BlockCreator {
 		Block block = null;
 		switch (blockTypes[random.nextInt(blockTypes.length)]) {
 		case SMALL:
-			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.small.width"))),
-					Integer.parseInt(Resourcer.getString("value.start.block")),
-					Integer.parseInt(Resourcer
-							.getString("model.block.small.width")),
-					Integer.parseInt(Resourcer
-							.getString("model.block.small.height")), gameField,
-					earth, getRandomForBlockSpeed());
+			block = new Block(
+					new Point(getRandomX(gameField, Integer.parseInt(Resourcer
+							.getString("model.block.small.width"))),
+							Integer.parseInt(Resourcer
+									.getString("value.start.block"))),
+					new Dimension(Integer.parseInt(Resourcer
+							.getString("model.block.small.width")), Integer
+							.parseInt(Resourcer
+									.getString("model.block.small.height"))),
+					gameField, earth, getRandomForBlockSpeed());
 			block.setColor(Color.BLUE);
 			break;
 		case MIDDLE:
-			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.middle.width"))),
-					Integer.parseInt(Resourcer.getString("value.start.block")),
-					Integer.parseInt(Resourcer
-							.getString("model.block.middle.width")),
-					Integer.parseInt(Resourcer
-							.getString("model.block.middle.height")),
+			block = new Block(
+					new Point(getRandomX(gameField, Integer.parseInt(Resourcer
+							.getString("model.block.middle.width"))),
+							Integer.parseInt(Resourcer
+									.getString("value.start.block"))),
+					new Dimension(Integer.parseInt(Resourcer
+							.getString("model.block.middle.width")), Integer
+							.parseInt(Resourcer
+									.getString("model.block.middle.height"))),
 					gameField, earth, getRandomForBlockSpeed());
 			block.setColor(Color.ORANGE);
 			break;
 		case LARGE:
-			block = new Block(getRandomX(gameField, Integer.parseInt(Resourcer
-					.getString("model.block.large.width"))),
-					Integer.parseInt(Resourcer.getString("value.start.block")),
-					Integer.parseInt(Resourcer
-							.getString("model.block.large.width")),
-					Integer.parseInt(Resourcer
-							.getString("model.block.large.height")), gameField,
-					earth, getRandomForBlockSpeed());
+			block = new Block(
+					new Point(getRandomX(gameField, Integer.parseInt(Resourcer
+							.getString("model.block.large.width"))),
+							Integer.parseInt(Resourcer
+									.getString("value.start.block"))),
+					new Dimension(Integer.parseInt(Resourcer
+							.getString("model.block.large.width")), Integer
+							.parseInt(Resourcer
+									.getString("model.block.large.height"))),
+					gameField, earth, getRandomForBlockSpeed());
 			block.setColor(Color.DARK_GRAY);
 			break;
 		}

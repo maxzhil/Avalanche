@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,7 +20,7 @@ public class Model extends Thread {
 	private GameField gameField;
 	private Earth earth;
 	private Avalanche avalanche;
-	private List<Thread> threads = new ArrayList<Thread>();
+	// private List<Thread> threads = new ArrayList<Thread>();
 	private List<AddBlockListener> addBlockListeners = new ArrayList<AddBlockListener>();
 	private List<DeleteBlockListener> deleteBlockListeners = new ArrayList<DeleteBlockListener>();
 	private GameOverListener gameOverListener;
@@ -32,11 +33,13 @@ public class Model extends Thread {
 								.getString("model.gamefield.height"))));
 		earth = new Earth(gameField);
 		avalanche = new Avalanche(earth);
-		character = new Character(
-				Integer.parseInt(Resourcer.getString("model.character.x")),
-				Integer.parseInt(Resourcer.getString("model.character.y")),
-				Integer.parseInt(Resourcer.getString("model.character.width")),
-				Integer.parseInt(Resourcer.getString("model.character.height")),
+		character = new Character(new Point(Integer.parseInt(Resourcer
+				.getString("model.character.x")), Integer.parseInt(Resourcer
+				.getString("model.character.y"))),
+				new Dimension(Integer.parseInt(Resourcer
+						.getString("model.character.width")),
+						Integer.parseInt(Resourcer
+								.getString("model.character.height"))),
 				gameField, earth);
 
 	}
@@ -59,22 +62,18 @@ public class Model extends Thread {
 	}
 
 	private void createEarthThread() {
-		Thread threadEarth = new Thread(earth);
-		threadEarth.start();
+		new Thread(earth).start();
 	}
 
 	private void createCharacterThread() {
-		Thread threadCharacter = new Thread(character);
-		threadCharacter.start();
+		new Thread(character).start();
 	}
 
 	public void addBlock() {
 		Block block = BlockCreator.createBlock(gameField, earth);
 		gameField.addBlock(block);
 		block.addDeleteBlockListener(deleteBlockListeners.get(0));
-		Thread thread = new Thread(block);
-		thread.start();
-		threads.add(thread);
+		new Thread(block).start();
 		notifyAddBlockListener(block);
 	}
 
@@ -98,20 +97,16 @@ public class Model extends Thread {
 	}
 
 	public void addAvalanche() {
-		Thread thread = new Thread(avalanche);
-		thread.start();
+		new Thread(avalanche).start();
 		character.addAvalanche(avalanche);
-		threads.add(thread);
 	}
 
 	public void moveRight() {
 		character.moveRight();
-
 	}
 
 	public void moveLeft() {
 		character.moveLeft();
-
 	}
 
 	public void jump() {

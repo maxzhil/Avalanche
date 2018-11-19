@@ -27,6 +27,7 @@ public class MainMenu extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setLayout(new BorderLayout());
+		
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(null);
 
@@ -35,6 +36,7 @@ public class MainMenu extends JFrame {
 		backgroundImageLabel
 				.setSize(backgroundImageLabel.getIcon().getIconWidth(),
 						backgroundImageLabel.getIcon().getIconHeight());
+		
 		JButton playButton = new JButton(Resourcer.getString("play"));
 		playButton
 				.setBounds((getSize().width - Integer.parseInt(Resourcer
@@ -49,6 +51,7 @@ public class MainMenu extends JFrame {
 				startGame();
 			}
 		});
+		
 		JButton exitButton = new JButton(Resourcer.getString("exit"));
 		exitButton
 				.setBounds(

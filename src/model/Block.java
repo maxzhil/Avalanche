@@ -21,9 +21,9 @@ public class Block extends GameObject implements Runnable {
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
 	private List<DeleteBlockListener> deleteListeners = new ArrayList<DeleteBlockListener>();
 
-	public Block(int x, int y, int width, int height, GameField gameField,
+	public Block(Point point, Dimension dimension, GameField gameField,
 			Earth earth, int fallingSpeed) {
-		super(new Point(x, y), new Dimension(width, height));
+		super(point, dimension);
 		this.gameField = gameField;
 		this.earth = earth;
 		this.fallingSpeed = fallingSpeed;
@@ -60,7 +60,6 @@ public class Block extends GameObject implements Runnable {
 	private void checkIntersect() {
 		if (this.isDropping) {
 			Rectangle rectangleThisBlock = getRectangle(this);
-
 			for (Block block : gameField.getBlocks()) {
 				Rectangle rectangleBlockFromIterator = getRectangle(block);
 				if (!block.equals(this)) {
@@ -93,11 +92,6 @@ public class Block extends GameObject implements Runnable {
 		gameField.deleteBlock(this);
 	}
 
-	private Rectangle getRectangle(Block block) {
-		return new Rectangle(block.getLocation().x, block.getLocation().y,
-				block.getDimension().height, block.getDimension().height);
-	}
-
 	public List<GameObjectListener> getGameObjectListeners() {
 		return listeners;
 	}
@@ -125,5 +119,4 @@ public class Block extends GameObject implements Runnable {
 	public Color getColor() {
 		return color;
 	}
-
 }

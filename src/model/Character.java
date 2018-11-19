@@ -22,9 +22,9 @@ public class Character extends GameObject implements Runnable {
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
 	private List<HeightScoreListener> heightScoreListeners = new ArrayList<HeightScoreListener>();
 
-	public Character(int x, int y, int width, int height, GameField gameField,
+	public Character(Point point, Dimension dimension, GameField gameField,
 			Earth earth) {
-		super(new Point(x, y), new Dimension(width, height));
+		super(point, dimension);
 		this.gameField = gameField;
 		this.earth = earth;
 	}
@@ -50,7 +50,6 @@ public class Character extends GameObject implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		notifyListeners();
 	}
 
 	private void getCurrentHeightScore() {
@@ -175,25 +174,16 @@ public class Character extends GameObject implements Runnable {
 		}
 	}
 
-	private Rectangle getRectangle(GameObject gameObject) {
-		Rectangle rectangle = new Rectangle(gameObject.getLocation().x,
-				gameObject.getLocation().y, gameObject.getDimension().width,
-				gameObject.getDimension().height);
-		return rectangle;
-	}
-
 	public void moveLeft() {
-		getLocation().x = getLocation().x
-				- Integer
-						.parseInt(Resourcer.getString("character.move.toward"));
+		getLocation().x -= Integer.parseInt(Resourcer
+				.getString("character.move.toward"));
 		checkGameFieldWidth(CollisionDirection.LEFT);
 		checkInteractWithBlock(CollisionDirection.LEFT);
 	}
 
 	public void moveRight() {
-		getLocation().x = getLocation().x
-				+ Integer
-						.parseInt(Resourcer.getString("character.move.toward"));
+		getLocation().x += Integer.parseInt(Resourcer
+				.getString("character.move.toward"));
 		checkGameFieldWidth(CollisionDirection.RIGHT);
 		checkInteractWithBlock(CollisionDirection.RIGHT);
 	}

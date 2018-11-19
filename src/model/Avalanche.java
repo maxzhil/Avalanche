@@ -4,13 +4,12 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.listeners.GameObjectListener;
 
 public class Avalanche extends GameObject implements Runnable {
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
 	private Earth earth;
-	private int value = 1;
+	private int valueForMovingAvalanche = 1;
 
 	public Avalanche(Earth earth) {
 		super(new Point(Integer.parseInt(Resourcer.getString("avalanche.x")),
@@ -35,9 +34,9 @@ public class Avalanche extends GameObject implements Runnable {
 	}
 
 	private void moveY() {
-		value++;
+		valueForMovingAvalanche++;
 		getLocation().y = earth.getLocation().y + earth.getDimension().height
-				- value;
+				- valueForMovingAvalanche;
 		getDimension().height++;
 	}
 

@@ -8,7 +8,6 @@ import java.util.List;
 import model.listeners.GameObjectListener;
 
 public class Earth extends GameObject implements Runnable {
-
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
 	private GameField gameField;
 
