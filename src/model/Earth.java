@@ -1,32 +1,31 @@
 package model;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import model.listeners.GameObjectListener;
 
 public class Earth extends GameObject implements Runnable {
-
 	private List<GameObjectListener> listeners = new ArrayList<GameObjectListener>();
 	private GameField gameField;
 
 	public Earth(GameField gameField) {
-		super(Integer.parseInt(Resourcer.getString("earth.x")), Integer
-				.parseInt(Resourcer.getString("earth.y")), gameField.getWidth()
-				- Integer.parseInt(Resourcer.getString("earth.value.indent")),
-				Integer.parseInt(Resourcer.getString("earth.height")));
+		super(new Point(Integer.parseInt(Resourcer.getString("earth.x")),
+				Integer.parseInt(Resourcer.getString("earth.y"))),
+				new Dimension(gameField.getDimension().width
+						- Integer.parseInt(Resourcer
+								.getString("earth.value.indent")),
+						Integer.parseInt(Resourcer.getString("earth.height"))));
 		this.gameField = gameField;
 	}
 
 	public void moveY(int value) {
-		changeY(value);
 		for (Block block : gameField.getBlocks()) {
-			if (!block.isDropping()) {
-				block.setY(block.getY() - value);
-			} else {
-				block.changeY(value);
-			}
+			block.getLocation().y -= value;
 		}
+		changeY(value);
 	}
 
 	@Override
@@ -34,7 +33,7 @@ public class Earth extends GameObject implements Runnable {
 		while (true) {
 			notifyListeners();
 			try {
-				Thread.sleep(10);
+				Thread.sleep(15);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

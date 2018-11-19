@@ -8,7 +8,7 @@ import model.GameObject;
 import model.listeners.GameObjectListener;
 
 public class AvalanchePanel extends JPanel implements GameObjectListener {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	public AvalanchePanel() {
@@ -18,8 +18,8 @@ public class AvalanchePanel extends JPanel implements GameObjectListener {
 
 	@Override
 	public void update(GameObject info) {
-		setLocation(info.getX(), info.getY());
-		setSize(info.getWidth(), info.getHeight());
+		setLocation(info.getLocation());
+		setSize(info.getDimension());
 
 	}
 }

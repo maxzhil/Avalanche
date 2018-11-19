@@ -1,12 +1,17 @@
 package model;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import model.listeners.AddBlockListener;
 import model.listeners.DeleteBlockListener;
+import model.listeners.GameObjectListener;
 import model.listeners.GameOverListener;
+import model.listeners.HeightScoreListener;
+import model.listeners.RemoteBlocksCountListener;
 
 public class Model extends Thread {
 	private boolean isPause = false;
@@ -15,22 +20,26 @@ public class Model extends Thread {
 	private GameField gameField;
 	private Earth earth;
 	private Avalanche avalanche;
-	private List<Thread> threads = new ArrayList<Thread>();
-	private List<AddBlockListener> listeners = new ArrayList<AddBlockListener>();
+	// private List<Thread> threads = new ArrayList<Thread>();
+	private List<AddBlockListener> addBlockListeners = new ArrayList<AddBlockListener>();
 	private List<DeleteBlockListener> deleteBlockListeners = new ArrayList<DeleteBlockListener>();
 	private GameOverListener gameOverListener;
 
 	public Model() {
-		gameField = new GameField(Integer.parseInt(Resourcer
-				.getString("model.gamefield.width")),
-				Integer.parseInt(Resourcer.getString("model.gamefield.height")));
+		gameField = new GameField(
+				new Dimension(Integer.parseInt(Resourcer
+						.getString("model.gamefield.width")),
+						Integer.parseInt(Resourcer
+								.getString("model.gamefield.height"))));
 		earth = new Earth(gameField);
 		avalanche = new Avalanche(earth);
-		character = new Character(
-				Integer.parseInt(Resourcer.getString("model.character.x")),
-				Integer.parseInt(Resourcer.getString("model.character.y")),
-				Integer.parseInt(Resourcer.getString("model.character.width")),
-				Integer.parseInt(Resourcer.getString("model.character.height")),
+		character = new Character(new Point(Integer.parseInt(Resourcer
+				.getString("model.character.x")), Integer.parseInt(Resourcer
+				.getString("model.character.y"))),
+				new Dimension(Integer.parseInt(Resourcer
+						.getString("model.character.width")),
+						Integer.parseInt(Resourcer
+								.getString("model.character.height"))),
 				gameField, earth);
 
 	}
@@ -52,58 +61,30 @@ public class Model extends Thread {
 		notifyGameOverListener();
 	}
 
-	private void notifyGameOverListener() {
-		gameOverListener.gameOver();
+	private void createEarthThread() {
+		new Thread(earth).start();
 	}
 
-	public void addBlockListener(AddBlockListener addBlockListener) {
-		listeners.add(addBlockListener);
-	}
-
-	public void addDeleteBlockListener(DeleteBlockListener addBlockListener) {
-		deleteBlockListeners.add(addBlockListener);
-	}
-
-	public void addGameOverListener(GameOverListener gameOverListener) {
-		this.gameOverListener = gameOverListener;
+	private void createCharacterThread() {
+		new Thread(character).start();
 	}
 
 	public void addBlock() {
 		Block block = BlockCreator.createBlock(gameField, earth);
 		gameField.addBlock(block);
 		block.addDeleteBlockListener(deleteBlockListeners.get(0));
-		Thread thread = new Thread(block);
-		thread.start();
-		threads.add(thread);
+		new Thread(block).start();
 		notifyAddBlockListener(block);
 	}
 
+	private void notifyGameOverListener() {
+		gameOverListener.gameOver();
+	}
+
 	public void notifyAddBlockListener(Block block) {
-		for (AddBlockListener addBlockListener : listeners) {
+		for (AddBlockListener addBlockListener : addBlockListeners) {
 			addBlockListener.addBlock(block);
 		}
-	}
-
-	public Character getGameCharacter() {
-		return character;
-	}
-
-	private void createEarthThread() {
-		Thread threadEarth = new Thread(earth);
-		threadEarth.start();
-	}
-
-	private void createCharacterThread() {
-		Thread threadCharacter = new Thread(character);
-		threadCharacter.start();
-	}
-
-	public Earth getEarth() {
-		return this.earth;
-	}
-
-	public Avalanche getAvalanche() {
-		return avalanche;
 	}
 
 	public GameField getGameField() {
@@ -116,24 +97,53 @@ public class Model extends Thread {
 	}
 
 	public void addAvalanche() {
-		Thread thread = new Thread(avalanche);
-		thread.start();
+		new Thread(avalanche).start();
 		character.addAvalanche(avalanche);
-		threads.add(thread);
 	}
 
 	public void moveRight() {
 		character.moveRight();
-
 	}
 
 	public void moveLeft() {
 		character.moveLeft();
-
 	}
 
 	public void jump() {
 		character.jump();
-
 	}
+
+	public void addBlockListener(AddBlockListener addBlockListener) {
+		addBlockListeners.add(addBlockListener);
+	}
+
+	public void addDeleteBlockListener(DeleteBlockListener addBlockListener) {
+		deleteBlockListeners.add(addBlockListener);
+	}
+
+	public void addGameOverListener(GameOverListener gameOverListener) {
+		this.gameOverListener = gameOverListener;
+	}
+
+	public void addEarthListener(GameObjectListener gameObjectListener) {
+		earth.addListener(gameObjectListener);
+	}
+
+	public void addCharacterListener(GameObjectListener gameObjectListener) {
+		character.addListener(gameObjectListener);
+	}
+
+	public void addAvalancheListener(GameObjectListener gameObjectListener) {
+		avalanche.addListener(gameObjectListener);
+	}
+
+	public void addHeightScoreListener(HeightScoreListener heightScoreListener) {
+		character.addHeightScoreListener(heightScoreListener);
+	}
+
+	public void addRemoteBlocksCountListener(
+			RemoteBlocksCountListener remoteBlocksCountListener) {
+		gameField.addRemoteBlocksCountListener(remoteBlocksCountListener);
+	}
+
 }

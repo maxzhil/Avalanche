@@ -1,22 +1,28 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import view.panel.AvalanchePanel;
 import view.panel.BlockPanel;
 import view.panel.CharacterPanel;
 import view.panel.EarthPanel;
+import view.panel.HeightScorePanel;
+import view.panel.RemoteBlocksCountPanel;
 import controller.Controller;
 import controller.KeyHandler;
 import model.Block;
 import model.Model;
+import model.Resourcer;
 import model.listeners.AddBlockListener;
 import model.listeners.DeleteBlockListener;
 import model.listeners.GameObjectListener;
@@ -29,43 +35,44 @@ public class View extends JFrame implements AddBlockListener,
 	private Model model;
 	private Controller controller;
 	private JPanel gameFieldPanel;
+	private JPanel informationPanel;
 	private CharacterPanel characterPanel;
 	private EarthPanel earthPanel;
 	private AvalanchePanel avalanchePanel;
+	private HeightScorePanel heightScorePanel;
+	private RemoteBlocksCountPanel remoteBlocksCountPanel;
+
 	private List<BlockPanel> blockPanels = new ArrayList<BlockPanel>();
 
 	public View(Model model, final Controller controller) {
 		super();
 		this.model = model;
 		this.controller = controller;
-		this.setTitle("01-06-Zhilenko");
+		this.setTitle(Resourcer.getString("view.title"));
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gameFieldPanel = new JPanel();
-		gameFieldPanel.setPreferredSize(new Dimension(model.getGameField()
-				.getWidth(), model.getGameField().getHeight()));
+		this.setResizable(false);
 		this.setLayout(new BorderLayout());
-		this.getContentPane().add(gameFieldPanel, BorderLayout.CENTER);
-
 		characterPanel = new CharacterPanel();
 		earthPanel = new EarthPanel();
 		avalanchePanel = new AvalanchePanel();
-		gameFieldPanel.add(characterPanel);
-		gameFieldPanel.add(earthPanel);
-		gameFieldPanel.add(avalanchePanel);
+		remoteBlocksCountPanel = new RemoteBlocksCountPanel();
+		heightScorePanel = new HeightScorePanel();
+		initializeGameFieldPanel();
+		initializeInformationPanel();
+		this.getContentPane().add(informationPanel, BorderLayout.NORTH);
+		this.getContentPane().add(gameFieldPanel, BorderLayout.CENTER);
+
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				new KeyHandler(controller).keyPressed(e.getKeyCode());
 			}
 		});
-		controller.addListenerEarth(earthPanel);
-		controller.addListenerCharacter(characterPanel);
-		controller.addListenerAvalanche(avalanchePanel);
-		controller.addBlockListener(this);
-		controller.addGameOverListener(this);
-		controller.addDeleteBlockListener(this);
+
+		initializeListeners();
 		pack();
+		this.setLocationRelativeTo(null);
 	}
 
 	@Override
@@ -87,12 +94,42 @@ public class View extends JFrame implements AddBlockListener,
 		gameFieldPanel.remove(blockPanel);
 		gameFieldPanel.repaint();
 		blockPanels.remove(blockPanel);
-		System.out.println("delete Block");
 	}
 
 	@Override
 	public void gameOver() {
-		JOptionPane.showMessageDialog(null, "Game over");
-		System.exit(0);
+		JOptionPane.showMessageDialog(null, Resourcer.getString("view.game.over"));
+		this.setVisible(false);
+		new MainMenu();
+
+	}
+
+	private void initializeGameFieldPanel() {
+		gameFieldPanel = new JPanel();
+		gameFieldPanel.setPreferredSize(new Dimension(model.getGameField()
+				.getDimension().width,
+				model.getGameField().getDimension().height));
+		gameFieldPanel.add(characterPanel);
+		gameFieldPanel.add(earthPanel);
+		gameFieldPanel.add(avalanchePanel);
+	}
+
+	private void initializeInformationPanel() {
+		informationPanel = new JPanel();
+		informationPanel.setBackground(Color.WHITE);
+		informationPanel.add(new JLabel(Resourcer.getString("view.info")));
+		informationPanel.add(heightScorePanel);
+		informationPanel.add(remoteBlocksCountPanel);
+	}
+
+	private void initializeListeners() {
+		controller.addHeightScoreListener(heightScorePanel);
+		controller.addRemoteBlocksCountListener(remoteBlocksCountPanel);
+		controller.addEarthListener(earthPanel);
+		controller.addCharacterListener(characterPanel);
+		controller.addAvalancheListener(avalanchePanel);
+		controller.addBlockListener(this);
+		controller.addGameOverListener(this);
+		controller.addDeleteBlockListener(this);
 	}
 }

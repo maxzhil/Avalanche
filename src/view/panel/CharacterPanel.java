@@ -18,9 +18,8 @@ public class CharacterPanel extends JPanel implements GameObjectListener {
 
 	@Override
 	public void update(GameObject info) {
-		setLocation(info.getX(), info.getY());
-		setSize(info.getWidth(), info.getHeight());
-
+		setLocation(info.getLocation());
+		setSize(info.getDimension());
 	}
 
 }
