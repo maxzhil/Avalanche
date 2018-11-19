@@ -1,6 +1,8 @@
 package model;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ public class Block extends GameObject implements Runnable {
 
 	public Block(int x, int y, int width, int height, GameField gameField,
 			Earth earth, int fallingSpeed) {
-		super(x, y, width, height);
+		super(new Point(x, y), new Dimension(width, height));
 		this.gameField = gameField;
 		this.earth = earth;
 		this.fallingSpeed = fallingSpeed;
@@ -46,10 +48,10 @@ public class Block extends GameObject implements Runnable {
 
 	private void moveY() {
 		if (isDropping) {
-			if (getY() + getHeight() < earth.getY()) {
+			if (getLocation().y + getDimension().height < earth.getLocation().y) {
 				changeY(-fallingSpeed);
 			} else {
-				setY(earth.getY() - getHeight());
+				getLocation().y = earth.getLocation().y - getDimension().height;
 				isDropping = false;
 			}
 		}
@@ -65,7 +67,8 @@ public class Block extends GameObject implements Runnable {
 					if (rectangleThisBlock
 							.intersects(rectangleBlockFromIterator)) {
 						if (!block.isDropping) {
-							setY(block.getY() - getHeight());
+							getLocation().y = block.getLocation().y
+									- getDimension().height;
 							isDropping = false;
 						} else {
 							this.isAlive = false;
@@ -91,8 +94,8 @@ public class Block extends GameObject implements Runnable {
 	}
 
 	private Rectangle getRectangle(Block block) {
-		return new Rectangle(block.getX(), block.getY(), block.getWidth(),
-				block.getHeight());
+		return new Rectangle(block.getLocation().x, block.getLocation().y,
+				block.getDimension().height, block.getDimension().height);
 	}
 
 	public List<GameObjectListener> getGameObjectListeners() {

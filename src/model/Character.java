@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class Character extends GameObject implements Runnable {
 
 	public Character(int x, int y, int width, int height, GameField gameField,
 			Earth earth) {
-		super(x, y, width, height);
+		super(new Point(x, y), new Dimension(width, height));
 		this.gameField = gameField;
 		this.earth = earth;
 	}
@@ -52,25 +54,27 @@ public class Character extends GameObject implements Runnable {
 	}
 
 	private void getCurrentHeightScore() {
-		heightScore = earth.getY() - (getY() + getHeight());
+		heightScore = earth.getLocation().y
+				- (getLocation().y + getDimension().height);
 	}
 
 	private void checkPositionY() {
-		int middleGameField = gameField.getHeight() / 2;
-		int deviationFromTheMiddle = middleGameField - getY();
-		if (getY() != middleGameField) {
+		int middleGameField = gameField.getDimension().height / 2;
+		int deviationFromTheMiddle = middleGameField - getLocation().y;
+		if (getLocation().y != middleGameField) {
 			earth.moveY(-deviationFromTheMiddle);
-			setY(middleGameField);
+			getLocation().y = middleGameField;
 		}
 	}
 
 	private void gravity() {
-		if (earth.getY() + earth.getHeight() > gameField.getHeight()) {
+		if (earth.getLocation().y + earth.getDimension().height > gameField
+				.getDimension().height) {
 			earth.moveY(Integer.parseInt(Resourcer
 					.getString("character.move.gravity")));
 		} else {
-			if (getY() + getHeight() >= earth.getY()) {
-				earth.setY(getY() + getHeight());
+			if (getLocation().y + getDimension().height >= earth.getLocation().y) {
+				earth.getLocation().y = getLocation().y + getDimension().height;
 				canJump = true;
 			}
 		}
@@ -78,7 +82,8 @@ public class Character extends GameObject implements Runnable {
 
 	private void checkInteractWithAvalanche() {
 		if (avalanche != null) {
-			if (getY() + getHeight() >= avalanche.getY()) {
+			if (getLocation().y + getDimension().height >= avalanche
+					.getLocation().y) {
 				isAlive = false;
 			}
 		}
@@ -109,36 +114,43 @@ public class Character extends GameObject implements Runnable {
 	}
 
 	private void checkAlive(Block block) {
-		if (block.getY() + block.getHeight() >= getY()
-				&& block.getY() + block.getHeight() <= getY() + getHeight() / 2) {
+		if (block.getLocation().y + block.getDimension().height >= getLocation().y
+				&& block.getLocation().y + block.getDimension().height <= getLocation().y
+						+ getDimension().height / 2) {
 			isAlive = false;
 		}
 	}
 
 	private void checkInteractWithBlockDown(Block block) {
-		if (getY() + getHeight() >= block.getY()
-				&& getY() + getHeight() <= block.getY() + getHeight() / 2) {
-			setY(block.getY() - getHeight());
+		if (getLocation().y + getDimension().height >= block.getLocation().y
+				&& getLocation().y + getDimension().height <= block
+						.getLocation().y + getDimension().height / 2) {
+			getLocation().y = block.getLocation().y - getDimension().height;
 			canJump = true;
 		}
 	}
 
 	private void checkInteractWithBlockLeft(Block block) {
-		if (getX() <= block.getX() + block.getWidth()) {
-			setX(block.getX() + block.getWidth());
+		if (getLocation().x <= block.getLocation().x
+				+ block.getDimension().width) {
+			getLocation().x = block.getLocation().x
+					+ block.getDimension().width;
 		}
 	}
 
 	private void checkInteractWithBlockRight(Block block) {
-		if (getX() + getWidth() >= block.getX()) {
-			setX(block.getX() - getWidth());
+		if (getLocation().x + getDimension().width >= block.getLocation().x) {
+			getLocation().x = block.getLocation().x - getDimension().width;
 		}
 	}
 
 	private void checkInteractWithBlockUp(Block block) {
-		if (getY() <= block.getY() + block.getHeight()
-				&& getY() >= block.getY() + block.getHeight() / 2) {
-			setY(block.getY() + block.getHeight());
+		if (getLocation().y <= block.getLocation().y
+				+ block.getDimension().height
+				&& getLocation().y >= block.getLocation().y
+						+ block.getDimension().height / 2) {
+			getLocation().y = block.getLocation().y
+					+ block.getDimension().height;
 			canJump = true;
 		}
 	}
@@ -164,24 +176,24 @@ public class Character extends GameObject implements Runnable {
 	}
 
 	private Rectangle getRectangle(GameObject gameObject) {
-		Rectangle rectangle = new Rectangle(gameObject.getX(),
-				gameObject.getY(), gameObject.getWidth(),
-				gameObject.getHeight());
+		Rectangle rectangle = new Rectangle(gameObject.getLocation().x,
+				gameObject.getLocation().y, gameObject.getDimension().width,
+				gameObject.getDimension().height);
 		return rectangle;
 	}
 
 	public void moveLeft() {
-		setX(getX()
+		getLocation().x = getLocation().x
 				- Integer
-						.parseInt(Resourcer.getString("character.move.toward")));
+						.parseInt(Resourcer.getString("character.move.toward"));
 		checkGameFieldWidth(CollisionDirection.LEFT);
 		checkInteractWithBlock(CollisionDirection.LEFT);
 	}
 
 	public void moveRight() {
-		setX(getX()
+		getLocation().x = getLocation().x
 				+ Integer
-						.parseInt(Resourcer.getString("character.move.toward")));
+						.parseInt(Resourcer.getString("character.move.toward"));
 		checkGameFieldWidth(CollisionDirection.RIGHT);
 		checkInteractWithBlock(CollisionDirection.RIGHT);
 	}
@@ -189,13 +201,15 @@ public class Character extends GameObject implements Runnable {
 	private void checkGameFieldWidth(CollisionDirection collisionDirection) {
 		switch (collisionDirection) {
 		case RIGHT:
-			if (getX() + getWidth() >= gameField.getWidth()) {
-				setX(0);
+			if (getLocation().x + getDimension().width >= gameField
+					.getDimension().width) {
+				getLocation().x = 0;
 			}
 			break;
 		case LEFT:
-			if (getX() <= 0) {
-				setX(gameField.getWidth() - getWidth());
+			if (getLocation().x <= 0) {
+				getLocation().x = gameField.getDimension().width
+						- getDimension().width;
 			}
 			break;
 		}

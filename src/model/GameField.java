@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Dimension;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -7,16 +8,14 @@ import model.Block;
 import model.listeners.RemoteBlocksCountListener;
 
 public class GameField {
-	private int height;
-	private int width;
+	private Dimension dimension;
 	private boolean isPause = false;
 	private List<Block> blocks = new CopyOnWriteArrayList<Block>();
 	private RemoteBlocksCountListener remoteBlocksCountListener;
 	private int countRemoteBlocks;
 
-	public GameField(int width, int height) {
-		this.width = width;
-		this.height = height;
+	public GameField(Dimension dimension) {
+		this.dimension = dimension;
 	}
 
 	public List<Block> getBlocks() {
@@ -36,12 +35,8 @@ public class GameField {
 		this.blocks = blocks;
 	}
 
-	public int getWidth() {
-		return width;
-	}
-
-	public int getHeight() {
-		return height;
+	public Dimension getDimension() {
+		return dimension;
 	}
 
 	public boolean isPause() {

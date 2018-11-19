@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +13,11 @@ public class Avalanche extends GameObject implements Runnable {
 	private int value = 1;
 
 	public Avalanche(Earth earth) {
-		super(Integer.parseInt(Resourcer.getString("avalanche.x")), earth
-				.getY() + earth.getHeight(), earth.getGameField().getWidth(),
-				Integer.parseInt(Resourcer.getString("avalanche.height")));
+		super(new Point(Integer.parseInt(Resourcer.getString("avalanche.x")),
+				earth.getLocation().y + earth.getDimension().height),
+				new Dimension(earth.getGameField().getDimension().width,
+						Integer.parseInt(Resourcer
+								.getString("avalanche.height"))));
 		this.earth = earth;
 	}
 
@@ -27,14 +31,14 @@ public class Avalanche extends GameObject implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
 		}
 	}
 
 	private void moveY() {
 		value++;
-		setY(earth.getY() + earth.getHeight() - value);
-		setHeight(getHeight() + 1);
+		getLocation().y = earth.getLocation().y + earth.getDimension().height
+				- value;
+		getDimension().height++;
 	}
 
 	public void addListener(GameObjectListener listener) {

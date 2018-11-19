@@ -55,7 +55,7 @@ public class BlockCreator {
 	}
 
 	private static int getRandomX(GameField gameField, int width) {
-		return random.nextInt(gameField.getWidth() - width);
+		return random.nextInt(gameField.getDimension().width - width);
 	}
 
 	private static int getRandomForBlockSpeed() {

@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,9 +25,11 @@ public class Model extends Thread {
 	private GameOverListener gameOverListener;
 
 	public Model() {
-		gameField = new GameField(Integer.parseInt(Resourcer
-				.getString("model.gamefield.width")),
-				Integer.parseInt(Resourcer.getString("model.gamefield.height")));
+		gameField = new GameField(
+				new Dimension(Integer.parseInt(Resourcer
+						.getString("model.gamefield.width")),
+						Integer.parseInt(Resourcer
+								.getString("model.gamefield.height"))));
 		earth = new Earth(gameField);
 		avalanche = new Avalanche(earth);
 		character = new Character(

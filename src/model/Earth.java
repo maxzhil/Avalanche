@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,16 +13,18 @@ public class Earth extends GameObject implements Runnable {
 	private GameField gameField;
 
 	public Earth(GameField gameField) {
-		super(Integer.parseInt(Resourcer.getString("earth.x")), Integer
-				.parseInt(Resourcer.getString("earth.y")), gameField.getWidth()
-				- Integer.parseInt(Resourcer.getString("earth.value.indent")),
-				Integer.parseInt(Resourcer.getString("earth.height")));
+		super(new Point(Integer.parseInt(Resourcer.getString("earth.x")),
+				Integer.parseInt(Resourcer.getString("earth.y"))),
+				new Dimension(gameField.getDimension().width
+						- Integer.parseInt(Resourcer
+								.getString("earth.value.indent")),
+						Integer.parseInt(Resourcer.getString("earth.height"))));
 		this.gameField = gameField;
 	}
 
 	public void moveY(int value) {
 		for (Block block : gameField.getBlocks()) {
-			block.setY(block.getY() - value);
+			block.getLocation().y -= value;
 		}
 		changeY(value);
 	}

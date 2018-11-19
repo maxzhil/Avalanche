@@ -8,8 +8,10 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import view.panel.AvalanchePanel;
 import view.panel.BlockPanel;
 import view.panel.CharacterPanel;
@@ -105,7 +107,8 @@ public class View extends JFrame implements AddBlockListener,
 	private void initializeGameFieldPanel() {
 		gameFieldPanel = new JPanel();
 		gameFieldPanel.setPreferredSize(new Dimension(model.getGameField()
-				.getWidth(), model.getGameField().getHeight()));
+				.getDimension().width,
+				model.getGameField().getDimension().height));
 		gameFieldPanel.add(characterPanel);
 		gameFieldPanel.add(earthPanel);
 		gameFieldPanel.add(avalanchePanel);
@@ -114,6 +117,7 @@ public class View extends JFrame implements AddBlockListener,
 	private void initializeInformationPanel() {
 		informationPanel = new JPanel();
 		informationPanel.setBackground(Color.WHITE);
+		informationPanel.add(new JLabel(Resourcer.getString("view.info")));
 		informationPanel.add(heightScorePanel);
 		informationPanel.add(remoteBlocksCountPanel);
 	}
